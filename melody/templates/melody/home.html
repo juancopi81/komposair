@@ -1,0 +1,110 @@
+{% extends "melody/base.html" %}
+
+{% block nav_item_home %}active{% endblock nav_item_home %}
+
+{% block span_current_home %}
+	<span class="sr-only">(current)</span>
+{% endblock span_current_home %} 
+
+
+{% block content %}
+
+	<div class="result">
+		<midi-visualizer type="staff" id="myVisualizer"></midi-visualizer>
+		<midi-player src="https://magenta.github.io/magenta-js/music/demos/melody.mid" sound-font visualizer="#myVisualizer"></midi-player>
+		
+	</div>
+
+	<div id="div-main">
+		<hr>
+	</div>
+
+	<div class="input">
+		<div class="container">
+			<div class="row">
+
+				<!-- Information of usage -->
+				<div class="col-sm">
+					<h2>Motif input</h2>
+					<p>Enter the first notes of the melody you want to generate with AI</p>
+					<!-- Form to enter the seed notes -->
+					<form id="input-form">
+						<div class="form-row">
+							<div class="form-group col-md-2">
+								<label for="input-duration">Duration</label>
+								<select id="input-duration" class="form-control" required>
+									<option value="" selected disabled>...</option>
+									<option value="1">&#119133;</option>
+									<option value="2">&#119134;</option>
+									<option value="4">&#119135;</option>
+									<option value="8">&#119136;</option>
+									<option value="16">&#119137;</option>
+									<option value="r1">&#119099;</option>
+									<option value="r2">&#119100;</option>
+									<option value="r4">&#119101;</option>
+									<option value="r8">&#119102;</option>
+									<option value="r16">&#119103;</option>
+								</select>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="input-pitch">Pitch</label>
+								<select id="input-pitch" class="form-control" required>
+									<option value="" selected disabled>...</option>
+									<option value="C">C</option>
+									<option value="D">D</option>
+									<option value="E">E</option>
+									<option value="F">F</option>
+									<option value="G">G</option>
+									<option value="A">A</option>
+									<option value="B">B</option>
+								</select>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="input-accidental">Accidental</label>
+								<select id="input-accidental" class="form-control" required>
+									<option value="" selected disabled>...</option>
+									<option value="b">&#9837;</option>
+									<option value="">&#9838;</option>
+									<option value="#">&#9839;</option>
+								</select>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="input-octave">Octave</label>
+								<select id="input-octave" class="form-control" required>
+									<option value="" selected disabled>...</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+								</select>
+							</div>
+							<div class="form-group col-md-2">
+								<div class="form-check">
+								    <input class="form-check-input" type="checkbox" id="input-dot">
+								    <label class="form-check-label" for="input-dot">
+								      Dotted
+								    </label>
+								</div>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary" id="input-submit">Add</button>
+						<label for="submit-input" class="text-danger small" id="input-info"></label>
+					</form>
+				</div>
+
+				<!-- Result of the input seed -->
+				<div class="col-sm">
+					<div id="staff-input"></div>
+					<div class="input-controls">
+						<button class="btn btn-primary" id="input-play">
+							<i class="fas fa-play"></i> Play
+						</button>
+						<button class="btn btn-primary" id="input-eraser">
+							<i class="fas fa-eraser"></i> Erase
+						</button>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}

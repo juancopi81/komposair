@@ -1,0 +1,15 @@
+{% extends "melody/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block nav_item_logout %}active{% endblock nav_item_logout %}
+
+{% block content %}
+	<h2>You have been logged out</h2>
+	<div class="border-tp">
+		<small class="text-muted">
+			<a href="{% url 'login' %}">Log In Again</a>
+		</small>
+	</div>
+
+
+{% endblock content %}

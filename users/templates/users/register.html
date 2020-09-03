@@ -1,0 +1,36 @@
+{% extends "melody/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block nav_item_register %}active{% endblock nav_item_register %}
+
+{% block span_current_register %}
+	<span class="sr-only">(current)</span>
+{% endblock span_current_register %} 
+
+{% block content %}
+
+	  <div class="container">
+	    <div class="row">
+	      <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+	        <div class="card card-signin my-5">
+	          <div class="card-body">
+	            <h5 class="card-title text-center">Join Today</h5>
+	            <form class="form-signin" method="POST">
+	              {% csrf_token %}
+	              {{ form|crispy }}
+	              <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign Up</button>
+	              <hr class="my-4">
+	            </form>
+	           	<div class="border-tp">
+					<small class="text-muted">
+						Already Have An Account? <a class="ml-2" href="{% url 'login' %}">Sign In</a>
+					</small>
+				</div>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+
+
+{% endblock content %}

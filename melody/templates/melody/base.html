@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  
+  {% if title %}
+    <title>Komposair - {{ title }}</title>
+  {% else %}
+    <title>Komposair - AI for Music</title>
+  {% endif %}
+
+  <!-- Bootstrap core CSS CDN -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+  <!-- Add font awesome -->
+  <script src="https://kit.fontawesome.com/37e8b20514.js" crossorigin="anonymous"></script>
+
+  <!-- Html Midi Player by Magenta -->
+  <script src="https://cdn.jsdelivr.net/combine/npm/tone@13,npm/@magenta/music@1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1"></script>
+  <!-- Add Vexflow to use music notation -->
+  <script src="https://npmcdn.com/vexflow@3.0.9/releases/vexflow-debug.js"></script>
+
+  <!-- Custom styles and js for this template -->
+  <link href="{% static 'melody/simple-sidebar.css' %}/" rel="stylesheet">
+  <script src="{% static 'melody/melody.js' %}/"></script>
+
+</head>
+
+<body>
+
+  <div class="d-flex" id="wrapper">
+
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+      <div class="sidebar-heading">Komposair </div>
+      <div class="list-group list-group-flush">
+        <a href="#" class="list-group-item list-group-item-action bg-light">Saved Melodies</a>
+        <a href="#" class="list-group-item list-group-item-action bg-light">About</a>
+        <a href="#" class="list-group-item list-group-item-action bg-light">Contact</a>
+        <a href="#" class="list-group-item list-group-item-action bg-light">Acknowledgements</a>
+      </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <button class="btn btn-primary" id="menu-toggle">Community</button>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            <li class="nav-item {% block nav_item_home %}{% endblock nav_item_home %}">
+              <a class="nav-link" href="{% url 'melody-home' %}">Home{% block span_current_home %}{% endblock span_current_home %}</a>
+            </li>
+            {% if user.is_authenticated %}
+              <li class="nav-item {% block nav_item_logout %}{% endblock nav_item_logout %}">
+                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+              </li>
+              <li class="nav-item dropdown {% block nav_item_dropdown %}{% endblock nav_item_dropdown %}">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{ user }}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="{% url 'profile' %}">Profile{% block span_current_profile %}{% endblock span_current_profile %}</a>
+                  <a class="dropdown-item" href="#">Another action</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+              </li>
+            {% else %}
+              <li class="nav-item {% block nav_item_login %}{% endblock nav_item_login %}">
+                <a class="nav-link" href="{% url 'login' %}">Login{% block span_current_login %}{% endblock span_current_login %}</a>
+              </li>
+              <li class="nav-item {% block nav_item_register %}{% endblock nav_item_register %}">
+                <a class="nav-link" href="{% url 'register' %}">Register{% block span_current_register %}{% endblock span_current_register %}</a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+
+      <div class="container-fluid">
+        <h1 class="mt-4"></h1>
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock content %}
+      </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+  </div>
+  <!-- /#wrapper -->
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+
+  <!-- Menu Toggle Script -->
+  <script>
+    $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+    });
+  </script>
+
+</body>
+
+</html>
