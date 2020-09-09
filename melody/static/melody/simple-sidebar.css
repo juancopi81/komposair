@@ -212,7 +212,7 @@
 
 #staff-input {
   width: 500px;
-  height: 160px;
+  height: 140px;
 }
 
 .input-controls {
@@ -224,4 +224,15 @@
 .input-controls button {
   margin-right: 15px;
   margin-left: 15px;
+}
+
+.bpm {
+  font-size: x-small;
+  vertical-align: middle;
+  margin: 0 auto;
+}
+
+.bpm label {
+  margin-right: 5px;
+  margin-top: 1px;
 }

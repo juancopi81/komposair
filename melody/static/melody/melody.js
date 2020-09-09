@@ -7,10 +7,26 @@ let totalCurrentDuration = 0;
 // Vexflow variables
 const VF = Vex.Flow;
 
+// Add the notes entered by the user
+let notes = [];
+
 document.addEventListener('DOMContentLoaded', () => {
 
 	// Start a new staff
 	eraseStaff();
+
+	// Start Tone
+	document.getElementById('input-play').onclick = async () => {
+		
+		await Tone.start();
+
+		// Create a player and play the motif
+		const player = new TonePlayer();
+		const bpm = parseInt(document.getElementById('bpm').value);
+
+		player.play(notes, bpm);
+		
+	};
 
 	// Button to erase notes
 	document.getElementById('input-eraser').addEventListener('click', eraseStaff);
@@ -27,9 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		inputOctave.disabled = (this.value.includes('r'));
 		inputDot.disabled = (this.value.includes('16') || this.value.includes('1'));
 	})
-
-	// Add the notes entered by the user
-	let notes = [];
 
 	document.querySelector('#input-form').onsubmit = (e) => {
 
@@ -96,12 +109,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			// Initialize empty string for each note
 			let noteString = '';
+			let noteDuration;
 			
 			// Check if is silence
 			if (note.duration.includes('r')) {
 				
 				// Remove r if is a rest
-				let noteDuration = note.duration.replace('r', '');
+				noteDuration = note.duration.replace('r', '');
 
 				// Check if silence is dotted
 				if (note.dot) {
@@ -207,6 +221,10 @@ function restsToComplete(notes) {
 
 function eraseStaff() {
 
+	// Clear notes array and set current duration to zero
+	notes = [];
+	totalCurrentDuration = 0;
+
 	// Remove staff to paint it again
 	const staff = document.getElementById('staff-input');
 
@@ -224,6 +242,7 @@ function eraseStaff() {
 	system.addStave({
 	  voices: [score.voice(score.notes(renderNotes))]
 	}).addClef('treble').addTimeSignature('4/4');
+
 
 	vf.draw();
 
