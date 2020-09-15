@@ -179,6 +179,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	};
 
+	// Ajax request to create melody when requested by the user
+	document.getElementById('input-generate').onclick = () => {
+
+		// Get the token
+		const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+		// Create new request add token 
+		const generateRequest = new XMLHttpRequest();
+		generateRequest.open('POST', '/generate');
+		generateRequest.setRequestHeader('X-CSRFToken', csrftoken);
+
+		generateRequest.onload = () => {
+
+			console.log('generateRequest');
+
+		};
+
+		// Add the motif to send with the request
+		const data = new FormData();
+		data.append('motif', JSON.stringify(notes));
+
+		// Send request
+		generateRequest.send(data);
+	};
+
 });
 
 function restsToComplete(notes) {

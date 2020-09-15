@@ -226,6 +226,10 @@
   margin-left: 15px;
 }
 
+#input-submit {
+  margin-bottom: 20px;
+}
+
 .bpm {
   font-size: x-small;
   vertical-align: middle;
