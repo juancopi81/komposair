@@ -21,12 +21,14 @@ def generate(request):
 		if not seed:
 			return JsonResponse({"succes": False}, status=400)
 
-		encoded_seed = parse_motif(seed)
+		encoded_seed, duration = parse_motif(seed)
+		
+		sixteenth_duration = duration / 0.25
 
 		# Create a melody generator
 		mg = MelodyGenerator()
 
-		melody = mg.generate_melody(encoded_seed, 50, SEQUENCE_LENGTH, 0.3)
+		melody = mg.generate_melody(encoded_seed, 64 - int(sixteenth_duration), SEQUENCE_LENGTH, 0.7)
 
 		print(melody)
 

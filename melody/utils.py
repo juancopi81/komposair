@@ -161,8 +161,9 @@ def parse_motif(motif, time_step = 0.25, parser="series"):
 		or magenta
 	"""
 
-	# Initialize and empty list
+	# Initialize and empty list and total duration to zero
 	encoded_motif = []
+	total_duration = 0
 
 	for notes in motif:
 		# Handle notes
@@ -182,6 +183,8 @@ def parse_motif(motif, time_step = 0.25, parser="series"):
 		# Calculate duration in quarter length
 		duration = 4.0 / duration
 
+		total_duration += duration
+
 		# Update duration if note is dotted
 		if (notes['dot']):
 			duration += duration / 2.0
@@ -199,7 +202,7 @@ def parse_motif(motif, time_step = 0.25, parser="series"):
 	# Cast encoded_motif to string
 	encoded_motif = " ".join(map(str, encoded_motif))
 
-	return encoded_motif
+	return encoded_motif, total_duration
 
 
 
