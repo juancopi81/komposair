@@ -2,6 +2,7 @@ import json
 import os
 import numpy as np
 import tensorflow.keras as keras
+from django.conf import settings
 import music21 as m21
 
 SEQUENCE_LENGTH = 64
@@ -97,10 +98,13 @@ class MelodyGenerator:
 
 		return index
 
-	def save_melody(self, melody, step_duration=0.25, format="midi", file_name="mel1.mid"):
+	def save_melody(self, melody, step_duration=0.25, format="midi", file_name="mel1.mid", bpm=90):
 
 		# Create a music21 stream
 		stream = m21.stream.Stream()
+
+		mm = m21.tempo.MetronomeMark(number=bpm)
+		stream.append(mm)
 
 		# Parse all the symbols in the melody and create note/rest objects
 		# 60 _ _ _ r _ 62 _
@@ -139,7 +143,12 @@ class MelodyGenerator:
 				step_counter += 1
 
 		# Write the m21 stream to midi 
-		stream.write(format, file_name)
+		midi = stream.write(format)
+
+
+		# Return the midi file object
+		return midi
+
 
 def parse_motif(motif, time_step = 0.25, parser="series"):
 	""" Parses the given notes to a string used by the model or by magenta

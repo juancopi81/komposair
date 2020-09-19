@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_http_methods
 from .utils import parse_motif, MelodyGenerator, SEQUENCE_LENGTH
 import json
@@ -16,6 +16,7 @@ def generate(request):
 
 		# Retrive seed
 		seed = json.loads(request.POST.get("motif"))
+		bpm = int(request.POST.get("bpm"))
 
 		# Sanity check
 		if not seed:
@@ -30,11 +31,17 @@ def generate(request):
 
 		melody = mg.generate_melody(encoded_seed, 64 - int(sixteenth_duration), SEQUENCE_LENGTH, 0.7)
 
-		print(melody)
+		midi = mg.save_melody(melody, bpm=bpm)
 
-		mg.save_melody(melody)
+		try:
+			with open(midi, 'rb') as f:
+				file_data = f.read()
 
-		# Return the seed
-		return JsonResponse({"seed": seed}, status=200)
+			response = HttpResponse(file_data, content_type="audio/midi", status=200)
+
+		except IOError:
+			response = JsonResponse({"succes": False}, status=400)
+
+		return response
 
 

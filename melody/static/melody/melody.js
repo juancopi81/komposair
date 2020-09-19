@@ -189,15 +189,21 @@ document.addEventListener('DOMContentLoaded', () => {
 		const generateRequest = new XMLHttpRequest();
 		generateRequest.open('POST', '/generate');
 		generateRequest.setRequestHeader('X-CSRFToken', csrftoken);
+		generateRequest.responseType = 'blob';
 
 		generateRequest.onload = () => {
+			// Get response from server
+			console.log(generateRequest.response);
 
-			console.log('generateRequest');
+			let objectURL = URL.createObjectURL(generateRequest.response);
 
+			document.getElementById('myVisualizer').src = objectURL;
+			document.getElementById('playerMidi').src = objectURL;
 		};
 
 		// Add the motif to send with the request
 		const data = new FormData();
+		data.append('bpm', document.getElementById('bpm').value)
 		data.append('motif', JSON.stringify(notes));
 
 		// Send request
