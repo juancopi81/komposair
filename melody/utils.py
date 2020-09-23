@@ -90,7 +90,7 @@ class MelodyGenerator:
 		# Temperature value -> 0, higher gets 1 other 0
 		# Temperature value -> 1, nothing changes in probabilities
 
-		predictions = np.log(probabilities) / temperature
+		predictions = np.log(probabilities.clip(min=0.00000000001)) / temperature
 		probabilities = np.exp(predictions) / np.sum(np.exp(predictions))
 
 		choices = range(len(probabilities)) # [0, 1, 2, 3]

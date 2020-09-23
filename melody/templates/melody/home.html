@@ -9,9 +9,12 @@
 {% block content %}
 
 	<div class="result">
-		<midi-visualizer type="staff" id="myVisualizer"></midi-visualizer>
-		<midi-player sound-font visualizer="#myVisualizer" id="playerMidi"></midi-player>
-		
+		<div id="instructions">
+			
+		</div>
+		<div id="results">
+			
+		</div>
 	</div>
 
 	<div id="div-main">
@@ -91,9 +94,14 @@
 
 				<!-- Result of the input seed -->
 				<div class="col-sm">
-					<div class="bpm">
-						<label for="bpm">BPM</label>
-						<input type="number" name="bpm" id="bpm" min="50" max="180" value="90">
+					<div class="row" class="bpm">
+						<div class="utils">
+							<label for="bpm">BPM</label>
+							<input type="number" name="bpm" id="bpm" min="50" max="180" value="90">
+						</div>
+						<div class="utils">
+							<span id="clickable-undo"><i class="fas fa-undo"></i></span>
+						</div>
 					</div>
 					<div id="staff-input"></div>
 					<div class="input-controls">

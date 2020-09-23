@@ -29,7 +29,7 @@ def generate(request):
 		# Create a melody generator
 		mg = MelodyGenerator()
 
-		melody = mg.generate_melody(encoded_seed, 64 - int(sixteenth_duration), SEQUENCE_LENGTH, 0.7)
+		melody = mg.generate_melody(encoded_seed, 64 - int(sixteenth_duration), SEQUENCE_LENGTH, 0.3)
 
 		midi = mg.save_melody(melody, bpm=bpm)
 

@@ -231,7 +231,6 @@
 }
 
 .bpm {
-  font-size: x-small;
   vertical-align: middle;
   margin: 0 auto;
 }
@@ -239,4 +238,13 @@
 .bpm label {
   margin-right: 5px;
   margin-top: 1px;
+}
+
+.utils {
+  font-size: x-small;
+  margin-right: 15px;
+}
+
+#clickable-undo {
+  cursor: pointer;
 }

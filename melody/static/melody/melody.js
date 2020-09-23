@@ -98,78 +98,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		// Calculate how many rests should be added to complete the bar
 		restsString = restsToComplete(notes);
 
-		// Create string for the notes voice
-		let notesString = '';
-
 		// Reset total current duration
 		totalCurrentDuration = 0;
 
-		// Create each value of the array as a string
-		for (note of notes) {
+		let [notesString, currentDuration] = parseNotesToVex(notes, totalCurrentDuration);
 
-			// Initialize empty string for each note
-			let noteString = '';
-			let noteDuration;
-			
-			// Check if is silence
-			if (note.duration.includes('r')) {
-				
-				// Remove r if is a rest
-				noteDuration = note.duration.replace('r', '');
-
-				// Check if silence is dotted
-				if (note.dot) {
-					
-					// Remove dot and write it in right position
-					noteString = noteDuration.replace('.', '');
-					noteString = 'B4/' + noteString +'/r.,'
-
-				} else {
-
-					// Create string of the silence
-					noteString = 'B4/' + noteDuration + '/r,';
-				}
-			} else {
-
-				// If not silence
-				noteString = note.note + '/' + note.duration + ',';
-				noteDuration = note.duration;
-			}
-
-			// Update the notes voice
-			notesString += noteString;
-
-			// Calculate the duration of the notes in 16th
-			let noteDurationInSixteenth = (16 / parseInt(noteDuration));
-
-			// If dotted increase value respectively
-			if (note.dot) {
-				noteDurationInSixteenth += noteDurationInSixteenth / 2;
-			}
-
-			// Update total duration of motive
-			totalCurrentDuration += noteDurationInSixteenth;
-		}
+		totalCurrentDuration = currentDuration;
 
 		renderNotes = notesString + restsString;
 
-		// Remove staff to paint it again
-		const staff = document.getElementById('staff-input');
-
-		while (staff.hasChildNodes()) {
-		    staff.removeChild(staff.lastChild);
-		}
-
-		// Paint new notes
-		var vf = new VF.Factory({renderer: {elementId: 'staff-input'}});
-		var score = vf.EasyScore();
-		var system = vf.System();
-
-		system.addStave({
-		  voices: [score.voice(score.notes(renderNotes))]
-		}).addClef('treble').addTimeSignature('4/4');
-
-		vf.draw();
+		// Add notes to staff
+		drawStaff(renderNotes);
 
 		// If motiv equals the allowed duration, disable more input
 		if (totalCurrentDuration === 16) {
@@ -177,6 +116,34 @@ document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('input-info').innerHTML = "You can't add more notes to your motif";
 		}
 
+	};
+
+	// Undo button - remove last note added
+	document.getElementById('clickable-undo').onclick = () => {
+		
+		// Remove last note from array
+		let lastNote = notes.pop();
+
+		// Calculate how many rests should be added to complete the bar
+		restsString = restsToComplete(notes);
+
+		// Reset total current duration
+		totalCurrentDuration = 0;
+
+		let [notesString, currentDuration] = parseNotesToVex(notes, totalCurrentDuration);
+
+		totalCurrentDuration = currentDuration;
+
+		renderNotes = notesString + restsString;
+
+		// Add notes to staff
+		drawStaff(renderNotes);
+
+		// If motiv equals the allowed duration, disable more input
+		if (totalCurrentDuration < 16) {
+			document.getElementById('input-submit').disabled = false;
+			document.getElementById('input-info').innerHTML = '';
+		}
 	};
 
 	// Ajax request to create melody when requested by the user
@@ -192,13 +159,23 @@ document.addEventListener('DOMContentLoaded', () => {
 		generateRequest.responseType = 'blob';
 
 		generateRequest.onload = () => {
-			// Get response from server
-			console.log(generateRequest.response);
 
+			// Get response from server and use it as url 
 			let objectURL = URL.createObjectURL(generateRequest.response);
 
-			document.getElementById('myVisualizer').src = objectURL;
-			document.getElementById('playerMidi').src = objectURL;
+			// Create midi elements
+			const player = document.createElement('midi-player');
+			const visualizer = document.createElement('midi-visualizer');
+
+			// Set attributes
+			setAttributes(player, {'src': objectURL, 'sound-font': '', 'visualizer': '#myVisualizer1'});
+			setAttributes(visualizer, {'type': 'staff', 'id': 'myVisualizer1', 'src': objectURL});
+
+			// Add new items to results
+			document.querySelector('#results').append(visualizer);
+			document.querySelector('#results').append(player);
+			
+			player.addVisualizer(document.getElementById('myVisualizer1'));
 		};
 
 		// Add the motif to send with the request
@@ -284,4 +261,90 @@ function eraseStaff() {
 
 	document.getElementById('input-info').innerHTML = '';
 	
+}
+
+
+function drawStaff(renderNotes) {
+
+	// Remove staff to paint it again
+	const staff = document.getElementById('staff-input');
+
+	while (staff.hasChildNodes()) {
+	    staff.removeChild(staff.lastChild);
+	}
+
+	// Paint new notes
+	var vf = new VF.Factory({renderer: {elementId: 'staff-input'}});
+	var score = vf.EasyScore();
+	var system = vf.System();
+
+	system.addStave({
+	  voices: [score.voice(score.notes(renderNotes))]
+	}).addClef('treble').addTimeSignature('4/4');
+
+	vf.draw();
+
+} 
+
+
+function parseNotesToVex(notes, totalCurrentDuration) {
+
+	// Create string for the notes voice
+	let notesString = '';
+
+	// Create each value of the array as a string
+	for (note of notes) {
+
+		// Initialize empty string for each note
+		let noteString = '';
+		let noteDuration;
+		
+		// Check if is silence
+		if (note.duration.includes('r')) {
+			
+			// Remove r if is a rest
+			noteDuration = note.duration.replace('r', '');
+
+			// Check if silence is dotted
+			if (note.dot) {
+				
+				// Remove dot and write it in right position
+				noteString = noteDuration.replace('.', '');
+				noteString = 'B4/' + noteString +'/r.,'
+
+			} else {
+
+				// Create string of the silence
+				noteString = 'B4/' + noteDuration + '/r,';
+			}
+		} else {
+
+			// If not silence
+			noteString = note.note + '/' + note.duration + ',';
+			noteDuration = note.duration;
+		}
+
+		// Update the notes voice
+		notesString += noteString;
+
+		// Calculate the duration of the notes in 16th
+		let noteDurationInSixteenth = (16 / parseInt(noteDuration));
+
+		// If dotted increase value respectively
+		if (note.dot) {
+			noteDurationInSixteenth += noteDurationInSixteenth / 2;
+		}
+
+		// Update total duration of motive
+		totalCurrentDuration += noteDurationInSixteenth;
+	}
+
+	return [notesString, totalCurrentDuration];
+}
+
+// Helper function to set the attributes of created elements
+function setAttributes(el, attrs) {
+	for (var key in attrs) {
+		el.setAttribute(key, attrs[key]);
+	}
 }
