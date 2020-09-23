@@ -149,6 +149,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	// Ajax request to create melody when requested by the user
 	document.getElementById('input-generate').onclick = () => {
 
+		// Hide instructions show loader
+		document.querySelector('#instructions').style.display = 'none';
+		document.querySelector('.loader').style.display = 'block';
+
+
 		// Get the token
 		const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
@@ -159,6 +164,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		generateRequest.responseType = 'blob';
 
 		generateRequest.onload = () => {
+
+			// Hide loader
+			document.querySelector('.information-seed').style.display = 'none';
 
 			// Get response from server and use it as url 
 			let objectURL = URL.createObjectURL(generateRequest.response);
