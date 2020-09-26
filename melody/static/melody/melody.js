@@ -70,12 +70,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		// Clear the form
 		let elements = document.querySelector('#input-form');
 
-		for (element of elements) {
-			element.value = '';
-			if (element.disabled) {
-				element.disabled = false;
-			}
-		};
+		// for (element of elements) {
+		// 	element.value = '';
+		// 	if (element.disabled) {
+		// 		element.disabled = false;
+		// 	}
+		// };
 
 		document.getElementById('input-dot').checked = false;
 
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		// Hide instructions show loader
 		document.querySelector('#instructions').style.display = 'none';
-		document.querySelector('.loader').style.display = 'block';
+		document.querySelector('#loading').className = 'display-block';
 
 
 		// Get the token

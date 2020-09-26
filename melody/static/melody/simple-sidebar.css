@@ -250,7 +250,7 @@
 }
 
 #instructions {
-  color: red;
+  color: #00008B;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
@@ -264,18 +264,110 @@
 }
 
 .loader {
-  display: none;
+  position: fixed;
+  left: 50%; 
+  top: 20%;
+  transform: translateX(-50%) translateY(-50%);
+  margin: auto;
   border: 16px solid #f3f3f3; /* Ligth gray */
   border-top: 16px solid #3498db; /* Blue */
   border-radius: 50%;
   width: 120px;
   height: 120px;
   animation: spin 2s linear infinite;
-  margin-left: 0 auto;
-  margin-right: 0 auto;
 }
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.display-none {
+  display: none;
+}
+
+.display-block {
+  display: block;
+}
+
+.saving {
+  font-family: 'Roboto', sans-serif;
+  position: fixed;
+  left: 55%; 
+  top: 48%;
+  text-align: center;
+  transform: translateX(-50%) translateY(-50%);
+  margin: auto;
+}
+
+/* Taken from https://martinwolf.org/before-2018/blog/2015/01/pure-css-savingloading-dots-animation/ */
+.saving span {
+  /**
+  * Use the blink animation, which is defined below
+  */
+  animation-name: blink;
+  /**
+  * The animation should take 1.4 seconds
+  */
+  animation-duration: 1.9s;
+  /**
+  * It will repeat itself forever
+  */
+  animation-iteration-count: infinite;
+  /**
+  * This makes sure that the starting style (opacity: .2)
+  * of the animation is applied before the animation starts.
+  * Otherwise we would see a short flash or would have
+  * to set the default styling of the dots to the same
+  * as the animation. Same applies for the ending styles.
+  */
+  animation-fill-mode: both;
+}
+
+.saving span:nth-child(2) {
+  /**
+  * Starts the animation of the second dot
+  * with a delay of .2s, otherwise all dots
+  * would animate at the same time
+  */
+  animation-delay: .2s;
+}
+
+.saving span:nth-child(3) {
+  /**
+  * Starts the animation of the third dot
+  * with a delay of .4s, otherwise all dots
+  * would animate at the same time
+  */
+  animation-delay: .4s;
+}
+
+@keyframes grow{
+  to{
+    transform: translateX(-50%) scale(0);
+  }
+}
+
+@keyframes blink {
+  /**
+  * At the start of the animation the dot
+  * has an opacity of .2
+  */
+  0% {
+    opacity: .2;
+  }
+  /**
+  * At 20% the dot is fully visible and
+  * then fades out slowly
+  */
+  20% {
+    opacity: 1;
+  }
+  /**
+  * Until it reaches an opacity of .2 and
+  * the animation can start again
+  */
+  100% {
+    opacity: .2;
+  }
 }
