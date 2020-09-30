@@ -149,50 +149,112 @@ document.addEventListener('DOMContentLoaded', () => {
 	// Ajax request to create melody when requested by the user
 	document.getElementById('input-generate').onclick = () => {
 
+		// Disable button while processing
+		document.getElementById('input-generate').disabled = true;
+
+		// Remove older generated melodis
+		const results = document.getElementById('results');
+
+		while(results.hasChildNodes()) {
+			results.removeChild(results.firstChild);
+		}
+
 		// Hide instructions show loader
-		document.querySelector('#instructions').style.display = 'none';
+		document.querySelector('#information-seed').className = 'information-seed';
+		document.querySelector('#instructions').className = 'display-none';
 		document.querySelector('#loading').className = 'display-block';
 
+		let sendedNotes = [];
 
-		// Get the token
-		const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+		// Add notes to motif if not empty, else, add default C4 quarter length
+		if (notes.length) {
+			sendedNotes = notes;
+		} else {
+			sendedNotes.push({duration: '4', note: 'C4', dot: false});
+		}
 
-		// Create new request add token 
-		const generateRequest = new XMLHttpRequest();
-		generateRequest.open('POST', '/generate');
-		generateRequest.setRequestHeader('X-CSRFToken', csrftoken);
-		generateRequest.responseType = 'blob';
+		// Create two melodies by requesting the server
+		for (var i = 0; i < 2; i++) {
+			// Get the token
+			const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-		generateRequest.onload = () => {
+			// Create new request add token 
+			const generateRequest = new XMLHttpRequest();
+			generateRequest.open('POST', '/generate');
+			generateRequest.setRequestHeader('X-CSRFToken', csrftoken);
+			generateRequest.responseType = 'blob';
 
-			// Hide loader
-			document.querySelector('.information-seed').style.display = 'none';
+			const idRequest = i;
 
-			// Get response from server and use it as url 
-			let objectURL = URL.createObjectURL(generateRequest.response);
+			generateRequest.onload = () => {
 
-			// Create midi elements
-			const player = document.createElement('midi-player');
-			const visualizer = document.createElement('midi-visualizer');
+				// Get response from server and use it as url 
+				let objectURL = URL.createObjectURL(generateRequest.response);
 
-			// Set attributes
-			setAttributes(player, {'src': objectURL, 'sound-font': '', 'visualizer': '#myVisualizer1'});
-			setAttributes(visualizer, {'type': 'staff', 'id': 'myVisualizer1', 'src': objectURL});
+				// Create midi elements
+				const player = document.createElement('midi-player');
+				const visualizer = document.createElement('midi-visualizer');
 
-			// Add new items to results
-			document.querySelector('#results').append(visualizer);
-			document.querySelector('#results').append(player);
+				// Set attributes
+				setAttributes(player, {'src': objectURL, 
+										'sound-font': 'https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus', 
+										'visualizer': '#myVisualizer' + idRequest});
+				setAttributes(visualizer, {'type': 'staff', 'id': 'myVisualizer' + idRequest, 'src': objectURL});
+
+				// Create Magenta Note Sequence based on midi
+				//let mSequence = core.urlToNoteSequence(objectURL).then((sequence) => console.log(JSON.stringify(sequence)));
+
+				// Add new items to results
+				document.querySelector('#results').append(visualizer);
+				document.querySelector('#results').append(player);
+				
+				player.addVisualizer(document.getElementById('myVisualizer' + idRequest));
+
+				// If 2 request, add magenta generated melody, hide loader and enable generator button
+				if (idRequest === 1) {
+
+					// Create a magenta note sequence
+					core.urlToNoteSequence(objectURL).then((unqNoteSequence) => {
+
+
+						generateMelody(sendedNotes, 0.9, unqNoteSequence).then((magentaSequence) => {
+						
+							const mPlayer = document.createElement('midi-player');
+							const mVisualizer = document.createElement('midi-visualizer');
+
+							setAttributes(mPlayer, {'sound-font': 'https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus',
+													'visualizer': '#myVisualizer2'});
+							setAttributes(mVisualizer, {'type': 'staff', 'id': 'myVisualizer2'})
+
+							mPlayer.noteSequence = magentaSequence;
+							mVisualizer.noteSequence = magentaSequence;
+
+							document.querySelector('#results').append(mVisualizer);
+							document.querySelector('#results').append(mPlayer);
+
+							mPlayer.addVisualizer(document.getElementById('myVisualizer2'));
+
+
+							// Hide the loader
+							document.querySelector('#information-seed').className = 'display-none';
+
+							// Enable generator button
+							document.getElementById('input-generate').disabled = false;
+						});
+					});
+				}
+			};
+
+			// Add the motif to send with the request
+			const data = new FormData();
+			data.append('bpm', document.getElementById('bpm').value)
 			
-			player.addVisualizer(document.getElementById('myVisualizer1'));
-		};
+			// Add notes to motif if not empty, else, add default C4 quarter length
+			data.append('motif', JSON.stringify(sendedNotes));
 
-		// Add the motif to send with the request
-		const data = new FormData();
-		data.append('bpm', document.getElementById('bpm').value)
-		data.append('motif', JSON.stringify(notes));
-
-		// Send request
-		generateRequest.send(data);
+			// Send request
+			generateRequest.send(data);
+		}	
 	};
 
 });
@@ -355,4 +417,38 @@ function setAttributes(el, attrs) {
 	for (var key in attrs) {
 		el.setAttribute(key, attrs[key]);
 	}
+}
+
+// Magenta function to generate melodies
+let checkPointRnn = 'https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/melody_rnn';
+
+// Initialize the model.
+let melodyRnn = new music_rnn.MusicRNN(checkPointRnn);
+let melodyRnnLoaded = melodyRnn.initialize();
+
+// Generate melody based on seed, temperature and model
+async function generateMelody(notes, temperature, noteSequence) {
+
+	// Wait for melody to load
+	await melodyRnnLoaded;
+
+	// Quantized note sequence
+	let quantizedSequence = core.sequences.quantizeNoteSequence(noteSequence, 4);
+
+	console.log('quantizedSequence: ', quantizedSequence)
+
+	// Calculate the duration of the theme, so it can be trim from there
+	let [notesString, currentDuration] = parseNotesToVex(notes, 0);
+
+	let seed = core.sequences.trim(quantizedSequence, 0, currentDuration);
+
+	let steps = 64 - currentDuration;
+
+	// Continue sequence based on given seed
+	let result = await melodyRnn.continueSequence(seed, steps, temperature);
+
+	// Combined generated sequence to seed
+	let combined = core.sequences.concatenate([seed, result]);
+
+	return combined;
 }
