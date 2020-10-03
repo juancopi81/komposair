@@ -245,7 +245,7 @@
   margin-right: 15px;
 }
 
-#clickable-undo {
+.clickable {
   cursor: pointer;
 }
 
@@ -370,4 +370,14 @@
   100% {
     opacity: .2;
   }
+}
+
+.result-player {
+  font-size: 12px;
+  height: 30px;
+  padding: 10px;
+}
+
+.melody-render {
+  margin-bottom: 22px;
 }

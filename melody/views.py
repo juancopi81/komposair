@@ -14,9 +14,10 @@ def generate(request):
 	# See if method was post
 	if request.method == "POST":
 
-		# Retrive seed
+		# Retrive values
 		seed = json.loads(request.POST.get("motif"))
 		bpm = int(request.POST.get("bpm"))
+		temperature = float(request.POST.get("temperature"))
 
 		# Sanity check
 		if not seed:
@@ -29,7 +30,7 @@ def generate(request):
 		# Create a melody generator
 		mg = MelodyGenerator()
 
-		melody = mg.generate_melody(encoded_seed, 64 - int(sixteenth_duration), SEQUENCE_LENGTH, 0.8)
+		melody = mg.generate_melody(encoded_seed, 64 - int(sixteenth_duration), SEQUENCE_LENGTH, temperature)
 
 		midi = mg.save_melody(melody, bpm=bpm)
 

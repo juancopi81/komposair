@@ -107,7 +107,23 @@
 							<input type="number" name="bpm" id="bpm" min="50" max="180" value="90">
 						</div>
 						<div class="utils">
-							<span id="clickable-undo"><i class="fas fa-undo"></i></span>
+							<label for="magenta-model">Magenta</label>
+							<select id="magenta-model">
+								<option value="0">basic_rnn</option>
+								<option value="1">melody_rnn</option>
+							</select>
+						</div>
+						<div class="utils">
+							<label for="custom-model">C. Model</label>
+							<select id="custom-model">
+								<option value="lstm-folk-1">lstm_folk_1</option>
+							</select>
+						</div>
+						<div class="utils">
+							<span id="clickable-add-model" class="clickable" data-toggle="modal" data-target="#uploadModel"><i class="fas fa-plus"></i></span>
+						</div>
+						<div class="utils">
+							<span id="clickable-undo" class="clickable"><i class="fas fa-undo"></i></span>
 						</div>
 					</div>
 					<div id="staff-input"></div>
@@ -126,6 +142,27 @@
 				
 			</div>
 		</div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="uploadModel" tabindex="-1" role="dialog" aria-labelledby="uploadModel" aria-hidden="true">
+	    <div class="modal-dialog modal-dialog-centered" role="document">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <h5 class="modal-title" id="uploadModelTitle">Upload your model</h5>
+	          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	            <span aria-hidden="true">&times;</span>
+	          </button>
+	        </div>
+	        <div class="modal-body">
+	            If you want your model to be parte of Komposair, please <a href="mailto: juancopi_81@hotmail.com">send us your model.</a>
+	            This process will be automated in the future.
+	        </div>
+	        <div class="modal-footer">
+	            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        </div>
+	      </div>
+	    </div>
 	</div>
 
 {% endblock content %}

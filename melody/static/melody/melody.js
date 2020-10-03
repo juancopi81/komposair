@@ -1,5 +1,19 @@
+// URLs of Magenta checkpoint models
+let magentaCheckpoints = [
+	'https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/basic_rnn',
+	'https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/melody_rnn'
+];
+let melodyRnn;
+let melodyRnnLoaded;
+
+// Initialize magenta model
+initializeMagentaCheckPoint(magentaCheckpoints[0]);
+
 // Variable to keep track of input notes
 let renderNotes;
+
+// Variable of temperatures
+let temperatures = [0.8, 0.9]
 
 // Check current duration of the motiv
 let totalCurrentDuration = 0;
@@ -14,6 +28,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// Start a new staff
 	eraseStaff();
+	
+	// Template of melodies
+	var melodyTemplate = Handlebars.compile(document.querySelector('#melody-template').innerHTML);
+
+	let selectedModel = document.getElementById('magenta-model');
+
+	// Change the model if required by user
+	selectedModel.addEventListener('change', () => {
+		let idx = parseInt(selectedModel.value);
+		let magentaModel = magentaCheckpoints[idx];
+		initializeMagentaCheckPoint(magentaModel);
+	});
 
 	// Start Tone
 	document.getElementById('input-play').onclick = async () => {
@@ -66,16 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			isDotted = true;
 			inputDuration = inputDuration + '.';
 		}
-
-		// Clear the form
-		let elements = document.querySelector('#input-form');
-
-		// for (element of elements) {
-		// 	element.value = '';
-		// 	if (element.disabled) {
-		// 		element.disabled = false;
-		// 	}
-		// };
 
 		document.getElementById('input-dot').checked = false;
 
@@ -152,6 +168,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		// Disable button while processing
 		document.getElementById('input-generate').disabled = true;
 
+		// Get bpm
+		let bpm = parseInt(document.getElementById('bpm').value);
+
+		// Create array of urls
+		let urls = [];
+
 		// Remove older generated melodis
 		const results = document.getElementById('results');
 
@@ -191,63 +213,52 @@ document.addEventListener('DOMContentLoaded', () => {
 				// Get response from server and use it as url 
 				let objectURL = URL.createObjectURL(generateRequest.response);
 
-				// Create midi elements
-				const player = document.createElement('midi-player');
-				const visualizer = document.createElement('midi-visualizer');
+				// Add url to array
+				urls.push(objectURL);
 
-				// Set attributes
-				setAttributes(player, {'src': objectURL, 
-										'sound-font': 'https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus', 
-										'visualizer': '#myVisualizer' + idRequest});
-				setAttributes(visualizer, {'type': 'staff', 'id': 'myVisualizer' + idRequest, 'src': objectURL});
-
-				// Create Magenta Note Sequence based on midi
-				//let mSequence = core.urlToNoteSequence(objectURL).then((sequence) => console.log(JSON.stringify(sequence)));
-
-				// Add new items to results
-				document.querySelector('#results').append(visualizer);
-				document.querySelector('#results').append(player);
-				
-				player.addVisualizer(document.getElementById('myVisualizer' + idRequest));
 
 				// If 2 request, add magenta generated melody, hide loader and enable generator button
-				if (idRequest === 1) {
+				if (urls.length === 2) {
 
 					// Create a magenta note sequence
-					core.urlToNoteSequence(objectURL).then((unqNoteSequence) => {
+					generateMelody(sendedNotes, 0.7, bpm).then((magentaSequence) => {
 
+						// Add time to each note
+						magentaSequence.notes.forEach(n => n.velocity = bpm);
 
-						generateMelody(sendedNotes, 0.9, unqNoteSequence).then((magentaSequence) => {
-						
-							const mPlayer = document.createElement('midi-player');
-							const mVisualizer = document.createElement('midi-visualizer');
+						// Create midi out of magenteSequence
+						const magentaMidi = core.sequenceProtoToMidi(magentaSequence);
 
-							setAttributes(mPlayer, {'sound-font': 'https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus',
-													'visualizer': '#myVisualizer2'});
-							setAttributes(mVisualizer, {'type': 'staff', 'id': 'myVisualizer2'})
+						// Convert byte array to file
+						const magentaFile = new Blob([magentaMidi], { type: 'audio/midi' });
 
-							mPlayer.noteSequence = magentaSequence;
-							mVisualizer.noteSequence = magentaSequence;
+						// Get url of the file
+						const magentaURL = URL.createObjectURL(magentaFile);
 
-							document.querySelector('#results').append(mVisualizer);
-							document.querySelector('#results').append(mPlayer);
+						// Create midi elements and populate the template
+						urls.push(magentaURL);
 
-							mPlayer.addVisualizer(document.getElementById('myVisualizer2'));
+						// Hide the loader
+						document.querySelector('#information-seed').className = 'display-none';
 
-
-							// Hide the loader
-							document.querySelector('#information-seed').className = 'display-none';
-
-							// Enable generator button
-							document.getElementById('input-generate').disabled = false;
+						// Add midi elements to the dom
+						urls.forEach(function(value, i) {
+							var melodyContent = melodyTemplate({'id': i, 'src': value});
+							document.querySelector('#results').innerHTML += melodyContent;
 						});
-					});
+
+						// Enable generator button
+						document.getElementById('input-generate').disabled = false;
+					}).catch(error => console.log(error));
 				}
 			};
 
 			// Add the motif to send with the request
 			const data = new FormData();
-			data.append('bpm', document.getElementById('bpm').value)
+
+			// Add bpm and temperature
+			data.append('bpm', document.getElementById('bpm').value);
+			data.append('temperature', temperatures[i]);
 			
 			// Add notes to motif if not empty, else, add default C4 quarter length
 			data.append('motif', JSON.stringify(sendedNotes));
@@ -419,30 +430,69 @@ function setAttributes(el, attrs) {
 	}
 }
 
-// Magenta function to generate melodies
-let checkPointRnn = 'https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/melody_rnn';
+function initializeMagentaCheckPoint(url) {
+	// Url of the checkpointi
+	let checkPointRnn = url;
 
-// Initialize the model.
-let melodyRnn = new music_rnn.MusicRNN(checkPointRnn);
-let melodyRnnLoaded = melodyRnn.initialize();
+	// Initialize the model.
+	melodyRnn = new music_rnn.MusicRNN(checkPointRnn);
+	melodyRnnLoaded = melodyRnn.initialize();
+
+}
+
 
 // Generate melody based on seed, temperature and model
-async function generateMelody(notes, temperature, noteSequence) {
+async function generateMelody(notes, temperature, bpm) {
 
 	// Wait for melody to load
 	await melodyRnnLoaded;
 
-	// Quantized note sequence
-	let quantizedSequence = core.sequences.quantizeNoteSequence(noteSequence, 4);
+	// Initialize variable
+	let totalDuration = 0;
+	let mNotes = [];
 
-	console.log('quantizedSequence: ', quantizedSequence)
+	// Create each value of the array as a string
+	for (note of notes) {
 
-	// Calculate the duration of the theme, so it can be trim from there
-	let [notesString, currentDuration] = parseNotesToVex(notes, 0);
+		// Initialize note duration to zero
+		let noteDuration ;
 
-	let seed = core.sequences.trim(quantizedSequence, 0, currentDuration);
+		// Check if is silence
+		if (note.duration.includes('r')) {
+			
+			// Remove r if is a rest
+			noteDuration = note.duration.replace('r', '');
 
-	let steps = 64 - currentDuration;
+		} else {
+
+			noteDuration = note.duration;
+		}
+
+		// Calculate the duration of the notes in 16th
+		let noteDurationInSixteenth = (16 / parseInt(noteDuration));
+
+		// If dotted increase value respectively
+		if (note.dot) {
+			noteDurationInSixteenth += noteDurationInSixteenth / 2;
+		}
+
+		// Add note to array
+		mNotes.push({pitch: Tone.Frequency(note.note).toMidi(), 
+					quantizedStartStep: totalDuration, 
+					quantizedEndStep: totalDuration + noteDurationInSixteenth});
+
+		// Update total duration of motive
+		totalDuration += noteDurationInSixteenth;
+	}
+
+	let seed = {
+		notes: mNotes,
+		quantizationInfo: {stepsPerQuarter: 4},
+		tempos: [{time: 0, qpm: bpm}],
+		totalQuantizedSteps: totalDuration
+	};
+
+	let steps = 64 - totalDuration;
 
 	// Continue sequence based on given seed
 	let result = await melodyRnn.continueSequence(seed, steps, temperature);

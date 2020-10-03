@@ -44,6 +44,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap" rel="stylesheet">
 
+  <!-- Include Handlebars from a CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+
+  <!-- Template for the melodies -->
+  {% verbatim %}
+  <script id="melody-template" type="text/x-handlebars-templat">
+    <div class="melody-render">
+      <midi-visualizer type="staff" id="myVisualizer{{ id }}" src="{{ src }}"></midi-visualizer>
+      <midi-player class="result-player" src="{{ src }}" sound-font="https://storage.googleapis.com/magentadata/js/soundfonts/salamander" visualizer="#myVisualizer{{ id }}"></midi-player>
+    </div>
+  </script>
+  {% endverbatim %}
+
 </head>
 
 <body>
