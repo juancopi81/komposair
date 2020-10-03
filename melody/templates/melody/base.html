@@ -52,7 +52,11 @@
   <script id="melody-template" type="text/x-handlebars-templat">
     <div class="melody-render">
       <midi-visualizer type="staff" id="myVisualizer{{ id }}" src="{{ src }}"></midi-visualizer>
-      <midi-player class="result-player" src="{{ src }}" sound-font="https://storage.googleapis.com/magentadata/js/soundfonts/salamander" visualizer="#myVisualizer{{ id }}"></midi-player>
+      <div class="utils-render">
+        <midi-player class="result-player" src="{{ src }}" sound-font="https://storage.googleapis.com/magentadata/js/soundfonts/salamander" visualizer="#myVisualizer{{ id }}"></midi-player>
+        <a href="{{ src }}" download><i class="fas fa-download"></i></span></a>
+        <span class="clickable"><i class="fas fa-save"></i></span>
+      </div>
     </div>
   </script>
   {% endverbatim %}

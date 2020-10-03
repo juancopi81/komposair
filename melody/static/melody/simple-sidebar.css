@@ -381,3 +381,15 @@
 .melody-render {
   margin-bottom: 22px;
 }
+
+.utils-render midi-player {
+  margin-right: 30px;
+}
+
+.utils-render > span {
+  padding-left: 20px;
+}
+
+.utils-render a {
+  color: inherit;
+}
