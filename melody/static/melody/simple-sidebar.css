@@ -204,6 +204,9 @@
 
 .result {
   height: 300px;
+  margin-left: 20px;
+  overflow-y: auto;
+  width: 100%;
 }
 
 #div-main hr {
@@ -378,6 +381,15 @@
   padding: 10px;
 }
 
+@media (max-width: 600px) {
+  .result-player {
+    width: 200px;
+  }
+  .utils-render midi-player {
+    margin-right: 25px;
+  }
+}
+
 .melody-render {
   margin-bottom: 22px;
 }
@@ -387,9 +399,24 @@
 }
 
 .utils-render > span {
-  padding-left: 20px;
+  padding-left: 10px;
 }
 
 .utils-render a {
   color: inherit;
+}
+
+#render-model {
+  padding: 5px;
+  margin-left: 10px;
+  font-size: xx-small;
+}
+
+#scoreboard {
+  font-size: x-small;
+}
+
+.padding-0{
+    padding-right:0;
+    padding-left:0;
 }

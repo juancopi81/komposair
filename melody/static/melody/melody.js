@@ -171,8 +171,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		// Get bpm
 		let bpm = parseInt(document.getElementById('bpm').value);
 
-		// Create array of urls
+		// Create array of urls and models
 		let urls = [];
+		let models = [];
 
 		// Remove older generated melodis
 		const results = document.getElementById('results');
@@ -213,9 +214,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				// Get response from server and use it as url 
 				let objectURL = URL.createObjectURL(generateRequest.response);
 
-				// Add url to array
+				// Add url and model to arrays
 				urls.push(objectURL);
-
+				models.push('lstm_folk_1');
 
 				// If 2 request, add magenta generated melody, hide loader and enable generator button
 				if (urls.length === 2) {
@@ -237,13 +238,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 						// Create midi elements and populate the template
 						urls.push(magentaURL);
+						models.push("magenta-" + selectedModel.options[selectedModel.selectedIndex].text);
 
 						// Hide the loader
 						document.querySelector('#information-seed').className = 'display-none';
 
 						// Add midi elements to the dom
 						urls.forEach(function(value, i) {
-							var melodyContent = melodyTemplate({'id': i, 'src': value});
+							var melodyContent = melodyTemplate({'id': i, 'src': value, 'model': models[i]});
 							document.querySelector('#results').innerHTML += melodyContent;
 						});
 

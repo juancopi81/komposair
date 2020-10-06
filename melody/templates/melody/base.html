@@ -51,11 +51,34 @@
   {% verbatim %}
   <script id="melody-template" type="text/x-handlebars-templat">
     <div class="melody-render">
-      <midi-visualizer type="staff" id="myVisualizer{{ id }}" src="{{ src }}"></midi-visualizer>
+      <div class"container">
+        <div class="row">
+          <div class="col-auto" id="scoreboard">
+            <div class="row">
+              <div class="col">
+                <span class="clickable"><i class="fas fa-caret-up"></i></span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col" id="score-number">0</div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <span class="clickable"><i class="fas fa-caret-down"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="col padding-0">
+            <midi-visualizer type="staff" id="myVisualizer{{ id }}" src="{{ src }}"></midi-visualizer>
+          </div>
+        </div>
+      </div>
       <div class="utils-render">
         <midi-player class="result-player" src="{{ src }}" sound-font="https://storage.googleapis.com/magentadata/js/soundfonts/salamander" visualizer="#myVisualizer{{ id }}"></midi-player>
         <a href="{{ src }}" download><i class="fas fa-download"></i></span></a>
         <span class="clickable"><i class="fas fa-save"></i></span>
+        <span class="alert button alert-info" id="render-model">{{ model }}</span>
+        <span class="clickable"><i class="fas fa-info-circle"></i></span>
       </div>
     </div>
   </script>
