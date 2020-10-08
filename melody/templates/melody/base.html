@@ -53,7 +53,7 @@
     <div class="melody-render">
       <div class"container">
         <div class="row">
-          <div class="col-auto" id="scoreboard">
+          <div class="col-auto display-none" id="scoreboard">
             <div class="row">
               <div class="col">
                 <span class="clickable"><i class="fas fa-caret-up"></i></span>
@@ -68,7 +68,7 @@
               </div>
             </div>
           </div>
-          <div class="col padding-0">
+          <div class="col padding-1">
             <midi-visualizer type="staff" id="myVisualizer{{ id }}" src="{{ src }}"></midi-visualizer>
           </div>
         </div>
@@ -76,9 +76,9 @@
       <div class="utils-render">
         <midi-player class="result-player" src="{{ src }}" sound-font="https://storage.googleapis.com/magentadata/js/soundfonts/salamander" visualizer="#myVisualizer{{ id }}"></midi-player>
         <a href="{{ src }}" download><i class="fas fa-download"></i></span></a>
-        <span class="clickable"><i class="fas fa-save"></i></span>
+        <span class="clickable"><i class="fas fa-save" id="save-melody{{ id }}"></i></span>
         <span class="alert button alert-info" id="render-model">{{ model }}</span>
-        <span class="clickable"><i class="fas fa-info-circle"></i></span>
+        <span class="clickable"><i class="fas fa-info-circle display-none"></i></span>
       </div>
     </div>
   </script>

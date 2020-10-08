@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth import authenticate
+from django.contrib import messages
 from .utils import parse_motif, MelodyGenerator, SEQUENCE_LENGTH
 import json
+from .models import Melody
 
 def home(request):
 	return render(request, "melody/home.html")
@@ -45,4 +48,32 @@ def generate(request):
 
 		return response
 
+# Save melody selected by user
+@require_http_methods(["POST"])
+def save_melody(request):
 
+	# Check method was post
+	if request.method == "POST":
+
+		# Check if user is authenticated
+		if not request.user.is_authenticated:
+			response = JsonResponse({"succes": False, "message": "You need to be logged in order to save melodies"}, status=200)
+
+		else:			
+			# Retrive values
+			notes = json.loads(request.POST.get("notes"))
+			bpm = int(request.POST.get("bpm"))
+			model = request.POST.get("model")
+
+			melody = Melody(notes=notes, bpm=bpm, aimodel=model)
+
+			melody.save()
+
+			melody.person.add(request.user)
+
+			messages.success(request, "The melody was saved in your profile")
+
+			response = JsonResponse({"succes": True, "message": "The melody was saved in your profile"})
+
+
+		return response
