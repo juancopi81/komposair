@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .utils import parse_motif, MelodyGenerator, SEQUENCE_LENGTH
 import json
@@ -73,7 +74,30 @@ def save_melody(request):
 
 			messages.success(request, "The melody was saved in your profile")
 
-			response = JsonResponse({"succes": True, "message": "The melody was saved in your profile"})
+			response = JsonResponse({"succes": True, "message": "The melody was saved in your melodies"})
 
 
 		return response
+
+# Show saved melodies of the user
+@login_required
+def my_melodies(request):
+
+	# Render template 
+	return render(request, "melody/my_melodies.html")
+
+def get_melodies(request):
+
+	# Get start and end point
+	start = int(request.GET.get("start") or 0)
+	end = int(request.GET.get("end") or (start + 9))
+
+	total = end - start
+
+	# Get the current user
+	person = request.user
+
+	# Get melodies of current user
+	melodies = person.melodies.all().order_by('score')[:total]
+
+	return  JsonResponse(melodies)

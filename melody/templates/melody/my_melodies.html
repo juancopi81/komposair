@@ -1,0 +1,16 @@
+{% extends "melody/base.html" %}
+{% load static %}
+
+{% block javascript %}
+	<script src="{% static 'melody/my-melodies.js' %}/"></script>
+{% endblock javascript %}
+
+{% block nav_item_dropdown %}active{% endblock nav_item_dropdown %}
+
+{% block span_current_my_melodies %}
+	<span class="sr-only">(current)</span>
+{% endblock span_current_my_melodies %}
+
+{% block content %}
+
+{% endblock content %}

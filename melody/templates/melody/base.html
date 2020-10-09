@@ -37,7 +37,7 @@
 
   <!-- Custom styles and js for this template -->
   <link href="{% static 'melody/simple-sidebar.css' %}/" rel="stylesheet">
-  <script src="{% static 'melody/melody.js' %}/"></script>
+  {% block javascript %}{% endblock javascript %}
   <script src="{% static 'melody/player.js' %}/"></script>
 
   <!-- Add Press Start 2P font -->
@@ -127,7 +127,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="{% url 'profile' %}">Profile{% block span_current_profile %}{% endblock span_current_profile %}</a>
-                  <a class="dropdown-item" href="#">Another action</a>
+                  <a class="dropdown-item" href="{% url 'my-melodies' %}">My melodies{% block span_current_my_melodies %}{% endblock span_current_my_melodies %}</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">Something else here</a>
                 </div>
