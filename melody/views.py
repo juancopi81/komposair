@@ -92,12 +92,13 @@ def get_melodies(request):
 	start = int(request.GET.get("start") or 0)
 	end = int(request.GET.get("end") or (start + 9))
 
-	total = end - start
+	print(end);
+	print(start);
 
 	# Get the current user
 	person = request.user
 
 	# Get melodies of current user
-	melodies = person.melodies.all().order_by('score')[:total]
+	melodies = person.melodies.all().order_by('score')[start:end+1].values()
 
-	return  JsonResponse(melodies)
+	return  JsonResponse({"melodies": list(melodies)})

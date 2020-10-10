@@ -412,8 +412,8 @@
   font-size: xx-small;
 }
 
-#scoreboard {
-  font-size: x-small;
+[id^="scoreboard"] {
+  font-size: small;
 }
 
 .padding-0{
@@ -424,4 +424,9 @@
 .padding-1{
     padding-right:0;
     padding-left:1;
+}
+
+.padding-0{
+    padding-right:0;
+    padding-left:0;
 }
