@@ -67,7 +67,9 @@ function add_melody(melody) {
 	// Add midi element to the dom
 	let	melodyContent = melodyTemplate({'id': melody.id, 'src': mURL, 'model': model});
 
-	document.querySelector('#melodies').innerHTML += melodyContent;
+	var div = document.getElementById('melodies');
+
+	div.insertAdjacentHTML('beforeend', melodyContent);
 
 	// Add scoreboard
 	document.getElementById('scoreboard' + melody.id).classList.remove('display-none');
