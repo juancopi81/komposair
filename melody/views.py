@@ -25,7 +25,7 @@ def generate(request):
 
 		# Sanity check
 		if not seed:
-			return JsonResponse({"succes": False}, status=400)
+			return JsonResponse({"success": False}, status=400)
 
 		encoded_seed, duration = parse_motif(seed)
 		
@@ -45,7 +45,7 @@ def generate(request):
 			response = HttpResponse(file_data, content_type="audio/midi", status=200)
 
 		except IOError:
-			response = JsonResponse({"succes": False}, status=400)
+			response = JsonResponse({"success": False}, status=400)
 
 		return response
 
@@ -58,7 +58,7 @@ def save_melody(request):
 
 		# Check if user is authenticated
 		if not request.user.is_authenticated:
-			response = JsonResponse({"succes": False, "message": "You need to be logged in order to save melodies"}, status=200)
+			response = JsonResponse({"success": False, "message": "You need to be logged in order to save melodies"}, status=200)
 
 		else:			
 			# Retrive values
@@ -72,9 +72,7 @@ def save_melody(request):
 
 			melody.person.add(request.user)
 
-			messages.success(request, "The melody was saved in your profile")
-
-			response = JsonResponse({"succes": True, "message": "The melody was saved in your melodies"})
+			response = JsonResponse({"success": True, "message": "The melody was saved in your melodies"})
 
 
 		return response
@@ -92,9 +90,6 @@ def get_melodies(request):
 	start = int(request.GET.get("start") or 0)
 	end = int(request.GET.get("end") or (start + 9))
 
-	print(end);
-	print(start);
-
 	# Get the current user
 	person = request.user
 
@@ -102,3 +97,22 @@ def get_melodies(request):
 	melodies = person.melodies.all().order_by('score')[start:end+1].values()
 
 	return  JsonResponse({"melodies": list(melodies)})
+
+# Delete user from melody so it is not shown in their profiel
+@login_required
+def delete_melody(request):
+
+	# Get the melody id and the user
+	user = request.user
+	melody_id = int(request.GET.get("melody_id"))
+
+	melody = Melody.objects.get(pk=melody_id)
+
+	try:
+		melody.person.remove(user)
+		response = JsonResponse({"success": True, "message": "The melody was deleted from your profile"}, status=200)
+	except Exception as e:
+		response = JsonResponse({"success": False, "message": "The melody was not deleted from your profile"}, status=200)
+		print(e)
+
+	return response

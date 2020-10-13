@@ -392,6 +392,10 @@
 
 .melody-render {
   margin-bottom: 22px;
+  animation-name: hide;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+  animation-play-state: paused;
 }
 
 .utils-render midi-player {
@@ -429,4 +433,36 @@
 .padding-0{
     padding-right:0;
     padding-left:0;
+}
+
+#melodies > * {
+  padding-bottom: 30px;
+}
+
+.bpm-render {
+  font-style: italic;
+  padding-left: 35px;
+  padding-bottom: 5px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: x-small;
+}
+
+@keyframes hide {
+  0% {
+    opacity: 1;
+    margin-bottom: 22px;
+  }
+
+  75% {
+    opacity: 0;
+    margin-bottom: 22px;
+  }
+
+  100% {
+    opacity: 0;
+    height: 0px;
+    line-height: 0px;
+    padding: 0px;
+    margin-bottom: 0px;
+  }
 }

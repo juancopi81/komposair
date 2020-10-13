@@ -40,9 +40,9 @@
   {% block javascript %}{% endblock javascript %}
   <script src="{% static 'melody/player.js' %}/"></script>
 
-  <!-- Add Press Start 2P font -->
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <!-- Add fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
   <!-- Include Handlebars from a CDN -->
   <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
@@ -50,21 +50,24 @@
   <!-- Template for the melodies -->
   {% verbatim %}
   <script id="melody-template" type="text/x-handlebars-templat">
-    <div class="melody-render">
+    <div class="melody-render" id="melody-render{{ id }}">
+      <div class="bpm-render display-none" id="bpm-render{{ id }}">
+        &#x2669; = {{ bpm }}
+      </div>
       <div class"container">
         <div class="row">
           <div class="col-auto display-none" id="scoreboard{{ id }}">
             <div class="row">
               <div class="col">
-                <span class="clickable"><i class="fas fa-caret-up"></i></span>
+                <span class="clickable"><i class="fas fa-caret-up" id="upvote{{ id }}"></i></span>
               </div>
             </div>
             <div class="row">
-              <div class="col" id="score-number{{ 0 }}">0</div>
+              <div class="col" id="score-number{{ id }}">{{ score }}</div>
             </div>
             <div class="row">
               <div class="col">
-                <span class="clickable"><i class="fas fa-caret-down"></i></span>
+                <span class="clickable"><i class="fas fa-caret-down" id="downvote{{ id }}" ></i></span>
               </div>
             </div>
           </div>
@@ -77,6 +80,7 @@
         <midi-player class="result-player" src="{{ src }}" sound-font="https://storage.googleapis.com/magentadata/js/soundfonts/salamander" visualizer="#myVisualizer{{ id }}"></midi-player>
         <a href="{{ src }}" download><i class="fas fa-download"></i></span></a>
         <span class="clickable"><i class="fas fa-save" id="save-melody{{ id }}"></i></span>
+        <span class="clickable display-none"><i class="fas fa-trash-alt" id="delete-melody{{ id }}"></i></span>
         <span class="alert button alert-info" id="render-model">{{ model }}</span>
         <span class="clickable"><i class="fas fa-info-circle display-none"></i></span>
       </div>

@@ -1,6 +1,6 @@
 // Define range of melodies the retriev
 let counter = 0;
-let quantity = 2; 
+let quantity = 10; 
 
 // Variable of the melody template 
 let melodyTemplate;
@@ -46,6 +46,7 @@ function add_melody(melody) {
 	let notes = melody.notes;
 	let bpm = melody.bpm;
 	let model = melody.aimodel;
+	let score = melody.score;
 
 	let magentaSequence = {notes,
 		quantizationInfo: {stepsPerQuarter: 4},
@@ -65,7 +66,7 @@ function add_melody(melody) {
 	const mURL = URL.createObjectURL(mFile);
 
 	// Add midi element to the dom
-	let	melodyContent = melodyTemplate({'id': melody.id, 'src': mURL, 'model': model});
+	let	melodyContent = melodyTemplate({'id': melody.id, 'src': mURL, 'model': model, 'bpm': bpm, 'score': score});
 
 	var div = document.getElementById('melodies');
 
@@ -77,4 +78,43 @@ function add_melody(melody) {
 	visualizer.classList.remove('padding-1');
 	visualizer.classList.add('padding-0');
 
+	// Remove save icon
+	document.getElementById('save-melody' + melody.id).parentNode.classList.add('display-none');
+
+	// Add bpm metric and delete icon
+	document.getElementById('bpm-render' + melody.id).classList.remove('display-none');
+	document.getElementById('delete-melody' + melody.id).parentNode.classList.remove('display-none');
+
+	// Add event listener to remove melodies from this user
+	document.getElementById('delete-melody' + melody.id).addEventListener('click', () => {
+		delete_melody(melody.id);
+	});
+
+	// Add event listener to vote melodies
+	document.getElementById('upvote' + melody.id).addEventListener('click', () => {
+		vote_melody(melody.id);
+	});
+	document.getElementById('downvote' + melody.id).addEventListener('click', () => {
+		vote_melody(melody.id);
+	});
 }
+
+function delete_melody(melodyID) {
+	fetch(`/delete_melody?melody_id=${melodyID}`)
+	.then(response => response.json())
+	.then(data => {
+		if (data.success) {
+			melodyDiv = document.getElementById('melody-render' + melodyID);
+			melodyDiv.style.animationPlayState = 'running';
+			melodyDiv.addEventListener('animationend', () => {
+				melodyDiv.remove();
+			});
+		} else {
+			alert(data.message);
+		};
+	});
+};
+
+function vote_melody(melodyID) {
+	alert(melodyID);
+};
