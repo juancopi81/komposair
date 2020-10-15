@@ -5,6 +5,10 @@ let quantity = 10;
 // Variable of the melody template 
 let melodyTemplate;
 
+// Colors
+let colorVote = '#ff0000';
+let colorNoVote = '#000000';
+
 // When DOM loads, render melodies
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -92,10 +96,10 @@ function add_melody(melody) {
 
 	// Add event listener to vote melodies
 	document.getElementById('upvote' + melody.id).addEventListener('click', () => {
-		vote_melody(melody.id);
+		vote_melody(melody.id, 1);
 	});
 	document.getElementById('downvote' + melody.id).addEventListener('click', () => {
-		vote_melody(melody.id);
+		vote_melody(melody.id, -1);
 	});
 }
 
@@ -115,6 +119,32 @@ function delete_melody(melodyID) {
 	});
 };
 
-function vote_melody(melodyID) {
-	alert(melodyID);
+function vote_melody(melodyID, vote) {
+	fetch(`/add_vote?melody_id=${melodyID}&vote=${vote}`)
+	.then(response => response.json())
+	.then(data => {
+		if (data.success) {
+			document.getElementById('score-number' + melodyID).innerHTML = data.score;
+			update_votes_view(melodyID, data.user_score)
+		}
+		
+		alert(data.message);
+	});
 };
+
+function update_votes_view(melodyID, userScore) {
+
+	if (userScore === 1) {
+		document.getElementById('upvote' + melodyID).style.color = colorVote;
+		document.getElementById('downvote' + melodyID).style.color = colorNoVote;
+	}
+	if (userScore === 0) {
+		document.getElementById('upvote' + melodyID).style.color = colorNoVote;
+		document.getElementById('downvote' + melodyID).style.color = colorNoVote;
+	}
+	if (userScore === -1) {
+		document.getElementById('upvote' + melodyID).style.color = colorNoVote;
+		document.getElementById('downvote' + melodyID).style.color = colorVote;
+	}
+
+}

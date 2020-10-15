@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
 class Melody(models.Model):
@@ -13,3 +14,12 @@ class Melody(models.Model):
 
 	def __str__(self):
 		return str(self.id)
+
+class Vote(models.Model):
+
+	user_score = models.IntegerField(validators=[MaxValueValidator(1), MinValueValidator(-1)])
+	melody = models.ForeignKey(Melody, on_delete=models.CASCADE, related_name="scores")
+	person = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="voters")
+
+	def __str__(self):
+		return f"{self.person} - {self.melody} - {self.score}"
