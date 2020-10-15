@@ -65,6 +65,14 @@ def save_melody(request):
 			notes = json.loads(request.POST.get("notes"))
 			bpm = int(request.POST.get("bpm"))
 			model = request.POST.get("model")
+			melody_id = int(request.POST.get("melody_id"))
+			user = request.user
+
+			# Check if melody already in database and in users melodies
+			if (melody_id != -1):
+
+				if user.melodies.filter(pk=melody_id).exists():
+					return JsonResponse({"success": False, "message": "This melody is already in your saved melodies"})
 
 			melody = Melody(notes=notes, bpm=bpm, aimodel=model)
 
@@ -89,6 +97,9 @@ def get_melodies(request):
 	# Get start and end point
 	start = int(request.GET.get("start") or 0)
 	end = int(request.GET.get("end") or (start + 9))
+	personal = json.loads(request.GET.get("personal") or False)
+
+	print(personal)
 
 	# Get the current user
 	person = request.user
@@ -96,6 +107,14 @@ def get_melodies(request):
 	# Get melodies of current user
 	melodies = Melody.objects.all().filter(person=person).order_by('-score')[start:end+1].values()
 
+	# Get votes of the user
+	votes = Vote.objects.all().filter(person=person)
+
+	for i, m_melody in enumerate(melodies):
+		for m_vote in votes:
+			if (m_vote.melody.id == m_melody['id']):
+				melodies[i]['user_score'] = m_vote.user_score
+				
 	return  JsonResponse({"melodies": list(melodies)})
 
 # Delete user from melody so it is not shown in their profiel
@@ -182,3 +201,7 @@ def add_vote(request):
 		response = JsonResponse({"success": False, "message": "Something went wrong and your vote was not registered"})
 
 	return response
+
+# Show all melodies
+def melodies(request):
+	return render(request, "melody/melodies.html")

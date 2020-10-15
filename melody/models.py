@@ -22,4 +22,4 @@ class Vote(models.Model):
 	person = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="voters")
 
 	def __str__(self):
-		return f"{self.person} - {self.melody} - {self.score}"
+		return f"{self.person} - {self.melody} - {self.user_score}"

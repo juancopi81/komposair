@@ -94,3 +94,52 @@ class TonePlayer {
      	Tone.Transport.start();
      }
 }
+
+async function saveMelody(melodyUrl, bpm, model, melodyId = -1) {
+	
+	// Get the notes out of the url
+	let noteSequence = await core.urlToNoteSequence(melodyUrl);
+	let notes = noteSequence.notes;
+
+	// Add the data to send with the request
+	const data = new FormData();
+
+	// Add bpm model and notes 
+	data.append('bpm', bpm);
+	data.append('model', model);
+	data.append('notes', JSON.stringify(notes));
+	data.append('melody_id', melodyId);
+
+	// Get the token
+	const csrftoken = getCookie('csrftoken');
+
+	// Send request to save melody
+	fetch('save_melody', {
+		method: 'POST',
+		body: data,
+		headers: { "X-CSRFToken": csrftoken },
+	})
+	.then(response => response.json())
+	.then(data => {
+		alert(data.message)
+	})
+	.catch(error => console.log('Error: ', error));	
+}
+
+// The following function are copying from 
+// https://docs.djangoproject.com/en/dev/ref/csrf/#ajax
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}

@@ -1,6 +1,6 @@
 // Define range of melodies the retriev
 let counter = 0;
-let quantity = 10; 
+let quantity = 4; 
 
 // Variable of the melody template 
 let melodyTemplate;
@@ -9,8 +9,16 @@ let melodyTemplate;
 let colorVote = '#ff0000';
 let colorNoVote = '#000000';
 
+let personalMelodies = true;
+
 // When DOM loads, render melodies
 document.addEventListener('DOMContentLoaded', () => {
+
+	if(document.URL.includes('my_melodies')) {
+		personalMelodies = true;
+	} else {
+		personalMelodies = false;
+	}
 
 	// Template of melodies
 	melodyTemplate = Handlebars.compile(document.querySelector('#melody-template').innerHTML);
@@ -34,12 +42,10 @@ function load() {
 	counter = end + 1;
 
 	// Get new melodies and add them
-	fetch(`/get_melodies?start=${start}&end=${end}`)
+	fetch(`/get_melodies?start=${start}&end=${end}&personal=${personalMelodies}`)
 	.then(response => response.json())
 	.then(data => {
-		for (let melody of data.melodies) {
-			add_melody(melody);
-		};
+		data.melodies.forEach(add_melody);
 	});
 };
 
@@ -82,12 +88,24 @@ function add_melody(melody) {
 	visualizer.classList.remove('padding-1');
 	visualizer.classList.add('padding-0');
 
-	// Remove save icon
-	document.getElementById('save-melody' + melody.id).parentNode.classList.add('display-none');
+	// Update votes view
+	if(melody.user_score) {
+		update_votes_view(melody.id, melody.user_score);
+	};
 
-	// Add bpm metric and delete icon
+	// Remove save icon add delete if is in my_melodies
+	if (personalMelodies) {
+		document.getElementById('save-melody' + melody.id).parentNode.classList.add('display-none');
+		document.getElementById('delete-melody' + melody.id).parentNode.classList.remove('display-none');
+	} else {
+		document.getElementById('save-melody' + melody.id).addEventListener('click', () => {
+			saveMelody(mURL, bpm, model, melody.id);
+		});
+	}
+	
+	// Add bpm and info
 	document.getElementById('bpm-render' + melody.id).classList.remove('display-none');
-	document.getElementById('delete-melody' + melody.id).parentNode.classList.remove('display-none');
+	document.getElementById('info-melody' + melody.id).classList.remove('display-none');
 
 	// Add event listener to remove melodies from this user
 	document.getElementById('delete-melody' + melody.id).addEventListener('click', () => {

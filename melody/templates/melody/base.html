@@ -38,7 +38,7 @@
   <!-- Custom styles and js for this template -->
   <link href="{% static 'melody/simple-sidebar.css' %}/" rel="stylesheet">
   {% block javascript %}{% endblock javascript %}
-  <script src="{% static 'melody/player.js' %}/"></script>
+  <script src="{% static 'melody/utils.js' %}/"></script>
 
   <!-- Add fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap" rel="stylesheet">
@@ -81,8 +81,8 @@
         <a href="{{ src }}" download><i class="fas fa-download"></i></span></a>
         <span class="clickable"><i class="fas fa-save" id="save-melody{{ id }}"></i></span>
         <span class="clickable display-none"><i class="fas fa-trash-alt" id="delete-melody{{ id }}"></i></span>
-        <span class="alert button alert-info" id="render-model">{{ model }}</span>
-        <span class="clickable"><i class="fas fa-info-circle display-none"></i></span>
+        <span class="alert button alert-info" id="render-model{{ id }}">{{ model }}</span>
+        <span class="clickable"><i class="fas fa-info-circle display-none" id="info-melody{{ id }}"></i></span>
       </div>
     </div>
   </script>
@@ -98,7 +98,7 @@
     <div class="bg-light border-right" id="sidebar-wrapper">
       <div class="sidebar-heading">Komposair </div>
       <div class="list-group list-group-flush">
-        <a href="#" class="list-group-item list-group-item-action bg-light">Saved Melodies</a>
+        <a href="{% url 'melodies' %}" class="list-group-item list-group-item-action bg-light">Saved Melodies</a>
         <a href="#" class="list-group-item list-group-item-action bg-light">About</a>
         <a href="#" class="list-group-item list-group-item-action bg-light">Contact</a>
         <a href="#" class="list-group-item list-group-item-action bg-light">Acknowledgements</a>
