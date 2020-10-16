@@ -121,7 +121,7 @@ async function saveMelody(melodyUrl, bpm, model, melodyId = -1) {
 	})
 	.then(response => response.json())
 	.then(data => {
-		alert(data.message)
+		alertDialog(data.message)
 	})
 	.catch(error => console.log('Error: ', error));	
 }
@@ -142,4 +142,9 @@ function getCookie(name) {
         }
     }
     return cookieValue;
+}
+
+function alertDialog(message) {
+	$('#modal-alert').modal('show');
+	document.getElementById('modal-text').innerHTML = message;
 }

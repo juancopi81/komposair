@@ -132,7 +132,7 @@ function delete_melody(melodyID) {
 				melodyDiv.remove();
 			});
 		} else {
-			alert(data.message);
+			alertDialog(data.message);
 		};
 	});
 };
@@ -146,7 +146,7 @@ function vote_melody(melodyID, vote) {
 			update_votes_view(melodyID, data.user_score)
 		}
 		
-		alert(data.message);
+		alertDialog(data.message);
 	});
 };
 

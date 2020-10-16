@@ -73,6 +73,10 @@ def save_melody(request):
 
 				if user.melodies.filter(pk=melody_id).exists():
 					return JsonResponse({"success": False, "message": "This melody is already in your saved melodies"})
+				else:
+					o_melody = Melody.objects.get(pk=melody_id)
+					o_melody.person.add(request.user)
+					return JsonResponse({"success": True, "message": "This melody was saved in your melodies"})
 
 			melody = Melody(notes=notes, bpm=bpm, aimodel=model)
 
@@ -89,8 +93,10 @@ def save_melody(request):
 @login_required
 def my_melodies(request):
 
+	title = "My Saved Melodies"
+
 	# Render template 
-	return render(request, "melody/my_melodies.html")
+	return render(request, "melody/my_melodies.html", {"title": title})
 
 def get_melodies(request):
 
@@ -98,22 +104,26 @@ def get_melodies(request):
 	start = int(request.GET.get("start") or 0)
 	end = int(request.GET.get("end") or (start + 9))
 	personal = json.loads(request.GET.get("personal") or False)
-
-	print(personal)
-
 	# Get the current user
 	person = request.user
 
-	# Get melodies of current user
-	melodies = Melody.objects.all().filter(person=person).order_by('-score')[start:end+1].values()
+	if personal:
+		# Get melodies of current user
+		melodies = Melody.objects.all().filter(person=person).order_by('-score')[start:end+1].values()
 
-	# Get votes of the user
-	votes = Vote.objects.all().filter(person=person)
+	else:
+		# Get all melodies of komposair
+		melodies = Melody.objects.all().order_by('-score')[start:end+1].values()
 
-	for i, m_melody in enumerate(melodies):
-		for m_vote in votes:
-			if (m_vote.melody.id == m_melody['id']):
-				melodies[i]['user_score'] = m_vote.user_score
+	# Check if user is authenticated
+	if person.is_authenticated:
+		# Get votes of the user
+		votes = Vote.objects.all().filter(person=person)
+
+		for i, m_melody in enumerate(melodies):
+			for m_vote in votes:
+				if (m_vote.melody.id == m_melody['id']):
+					melodies[i]['user_score'] = m_vote.user_score
 				
 	return  JsonResponse({"melodies": list(melodies)})
 
@@ -141,7 +151,8 @@ def add_vote(request):
 
 	# Check that user is logged in
 	if not request.user.is_authenticated:
-		response = JsonResponse({"success": False, "message": "You need to be logged in order to vote"}, status=200)
+		return JsonResponse({"success": False, "message": "You need to be logged in order to vote"}, status=200)
+
 
 	# Get melody id and user
 	user = request.user
@@ -204,4 +215,5 @@ def add_vote(request):
 
 # Show all melodies
 def melodies(request):
-	return render(request, "melody/melodies.html")
+	title = "Generated Melodies by AI"
+	return render(request, "melody/melodies.html", {"title": title})
