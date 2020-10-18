@@ -51,8 +51,13 @@
   {% verbatim %}
   <script id="melody-template" type="text/x-handlebars-templat">
     <div class="melody-render" id="melody-render{{ id }}">
-      <div class="bpm-render display-none" id="bpm-render{{ id }}">
-        &#x2669; = {{ bpm }}
+      <div class="row">
+        <div class="bpm-render display-none" id="bpm-render{{ id }}">
+          &#x2669; = {{ bpm }}
+        </div>
+        <div class="bpm-render">
+          {{ date }}
+        </div>
       </div>
       <div class"container">
         <div class="row">
@@ -133,7 +138,7 @@
                   <a class="dropdown-item" href="{% url 'profile' %}">Profile{% block span_current_profile %}{% endblock span_current_profile %}</a>
                   <a class="dropdown-item" href="{% url 'my-melodies' %}">My melodies{% block span_current_my_melodies %}{% endblock span_current_my_melodies %}</a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Something else here</a>
+                  <a class="dropdown-item" href="#">I feel lucky</a>
                 </div>
               </li>
             {% else %}

@@ -57,6 +57,14 @@ function add_melody(melody) {
 	let bpm = melody.bpm;
 	let model = melody.aimodel;
 	let score = melody.score;
+	let date = melody.date_created;
+	let convertDate = new Date(date);
+
+	// Options for formatter date
+	let optionsDate = { year: 'numeric', month: 'long', day: 'numeric'};
+
+	let parseDate = convertDate.toLocaleString('en-US', optionsDate);
+
 
 	let magentaSequence = {notes,
 		quantizationInfo: {stepsPerQuarter: 4},
@@ -76,7 +84,7 @@ function add_melody(melody) {
 	const mURL = URL.createObjectURL(mFile);
 
 	// Add midi element to the dom
-	let	melodyContent = melodyTemplate({'id': melody.id, 'src': mURL, 'model': model, 'bpm': bpm, 'score': score});
+	let	melodyContent = melodyTemplate({'id': melody.id, 'src': mURL, 'model': model, 'bpm': bpm, 'score': score, 'date': parseDate});
 
 	var div = document.getElementById('melodies');
 
