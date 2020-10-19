@@ -7,6 +7,7 @@ from django.contrib import messages
 from .utils import parse_motif, MelodyGenerator, SEQUENCE_LENGTH
 import json
 from .models import Melody, Vote
+from .forms import FilterForm
 
 def home(request):
 	return render(request, "melody/home.html")
@@ -93,10 +94,26 @@ def save_melody(request):
 @login_required
 def my_melodies(request):
 
+	if request.method == "POST":
+		# create a form instance and populate it with data from the request:
+		form = FilterForm(request.POST)
+		# check whether it's valid:
+		if form.is_valid():
+			m_filter = form.cleaned_data['m_filter']
+			m_order = form.cleaned_data['m_order']
+
+	else:
+		form = FilterForm()
+
 	title = "My Saved Melodies"
 
+	context = {
+		"title": title,
+		"form": form
+	}
+
 	# Render template 
-	return render(request, "melody/my_melodies.html", {"title": title})
+	return render(request, "melody/my_melodies.html", context)
 
 def get_melodies(request):
 
@@ -104,16 +121,24 @@ def get_melodies(request):
 	start = int(request.GET.get("start") or 0)
 	end = int(request.GET.get("end") or (start + 9))
 	personal = json.loads(request.GET.get("personal") or False)
+	m_filter = str(request.GET.get("filter") or "score")
+	m_order = str(request.GET.get("order") or "-")
+
+	if m_order == "-":
+		m_order_by = m_order + m_filter
+	else:
+		m_order_by = m_filter
+
 	# Get the current user
 	person = request.user
 
 	if personal:
 		# Get melodies of current user
-		melodies = Melody.objects.all().filter(person=person).order_by('-score')[start:end+1].values()
+		melodies = Melody.objects.all().filter(person=person).order_by(m_order_by)[start:end+1].values()
 
 	else:
 		# Get all melodies of komposair
-		melodies = Melody.objects.all().order_by('-score')[start:end+1].values()
+		melodies = Melody.objects.all().order_by(m_order_by)[start:end+1].values()
 
 	# Check if user is authenticated
 	if person.is_authenticated:
@@ -215,5 +240,23 @@ def add_vote(request):
 
 # Show all melodies
 def melodies(request):
+	
+	if request.method == "POST":
+		# create a form instance and populate it with data from the request:
+		form = FilterForm(request.POST)
+		# check whether it's valid:
+		if form.is_valid():
+			m_filter = form.cleaned_data['m_filter']
+			m_order = form.cleaned_data['m_order']
+
+	else:
+		form = FilterForm()
+
 	title = "Generated Melodies by AI"
-	return render(request, "melody/melodies.html", {"title": title})
+
+	context = {
+		"title": title,
+		"form": form
+	}
+
+	return render(request, "melody/melodies.html", context)

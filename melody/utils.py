@@ -1,7 +1,8 @@
 import json
 import os
 import numpy as np
-import tensorflow.keras as keras
+from tensorflow.keras.models import load_model
+from tensorflow.keras.utils import to_categorical
 from django.conf import settings
 import music21 as m21
 
@@ -33,7 +34,7 @@ class MelodyGenerator:
 
 		self.model_path = os.path.join(DIRNAME, model_path)
 
-		self.model = keras.models.load_model(self.model_path)
+		self.model = load_model(self.model_path)
 
 		mapping_path = os.path.join(DIRNAME, MAPPING_PATH)
 
@@ -59,7 +60,7 @@ class MelodyGenerator:
 			seed = seed[-max_sequence_length:]
 
 			# One-hot encode the seed
-			onehot_seed = keras.utils.to_categorical(seed, num_classes = len(self._mappings))
+			onehot_seed = to_categorical(seed, num_classes = len(self._mappings))
 			#(New dim, max_sequence_length, number of symbols in the vocab) Add third dimension -> for keras expect multiple samples
 			onehot_seed = onehot_seed[np.newaxis,...]
 

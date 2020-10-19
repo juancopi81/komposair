@@ -40,9 +40,11 @@ function load() {
 	const start = counter;
 	const end = counter + quantity;
 	counter = end + 1;
+	const filter = document.getElementById('id_m_filter').value;
+	const order = document.getElementById('id_m_order').value;
 
 	// Get new melodies and add them
-	fetch(`/get_melodies?start=${start}&end=${end}&personal=${personalMelodies}`)
+	fetch(`/get_melodies?start=${start}&end=${end}&personal=${personalMelodies}&filter=${filter}&order=${order}`)
 	.then(response => response.json())
 	.then(data => {
 		data.melodies.forEach(add_melody);

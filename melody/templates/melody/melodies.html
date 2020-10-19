@@ -12,6 +12,25 @@
 {% endblock span_current_my_melodies %}
 
 {% block content %}
+	<span data-toggle="collapse" data-target="#filter-melodies" class="clickable d-flex flex-row-reverse"><i class="fas fa-sliders-h" id="filter-icon"></i></span>
+	<div class="collapse" id="filter-melodies">
+		<div id="filter-melodies-content" class="d-flex flex-row-reverse">
+			<form method="POST">
+				{% csrf_token %}
+				<div class="form-row align-items-center">
+					<div class="col-auto my-1">
+						{{ form.m_filter }}
+					</div>
+					<div class="col-auto my-1">
+						{{ form.m_order }}
+					</div>
+					<div class="col-auto my-1">
+						<button type="submit" class="btn btn-secondary btn-sm">Filter</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
 	<div id="melodies">
 		
 	</div>
