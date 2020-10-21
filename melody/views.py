@@ -260,3 +260,20 @@ def melodies(request):
 	}
 
 	return render(request, "melody/melodies.html", context)
+
+def melody(request, melody_id):
+
+	melody = Melody.objects.filter(pk=melody_id)
+
+	if not melody:
+		message = "There is no such melody"
+	else:
+		message = ""
+
+	context = {
+		"title": "Details of Melody ",
+		"message": message,
+		"melody_id": melody_id
+	}
+
+	return render(request, "melody/melody.html", context)

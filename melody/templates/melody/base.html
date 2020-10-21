@@ -11,7 +11,7 @@
 
   
   {% if title %}
-    <title>Komposair - {{ title }}</title>
+    <title>Komposair - {{ title }} {% if melody_id %}{{ melody_id }}{% endif %}</title>
   {% else %}
     <title>Komposair - AI for Music</title>
   {% endif %}
@@ -37,8 +37,8 @@
 
   <!-- Custom styles and js for this template -->
   <link href="{% static 'melody/simple-sidebar.css' %}/" rel="stylesheet">
-  {% block javascript %}{% endblock javascript %}
   <script src="{% static 'melody/utils.js' %}/"></script>
+  {% block javascript %}{% endblock javascript %}
 
   <!-- Add fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap" rel="stylesheet">
@@ -103,7 +103,7 @@
     <div class="bg-light border-right" id="sidebar-wrapper">
       <div class="sidebar-heading">Komposair </div>
       <div class="list-group list-group-flush">
-        <a href="{% url 'melodies' %}" class="list-group-item list-group-item-action bg-light">Saved Melodies</a>
+        <a href="{% url 'melodies' %}" class="list-group-item list-group-item-action bg-light" id="saved-melodies">Saved Melodies</a>
         <a href="#" class="list-group-item list-group-item-action bg-light">About</a>
         <a href="#" class="list-group-item list-group-item-action bg-light">Contact</a>
         <a href="#" class="list-group-item list-group-item-action bg-light">Acknowledgements</a>
@@ -154,7 +154,7 @@
       </nav>
 
       <div class="container-fluid">
-        <h1 class="mt-4"></h1>
+        <h1 class="mt-4">{% block h1_title %}{% endblock %}</h1>
         {% if messages %}
           {% for message in messages %}
             <div class="alert alert-{{ message.tags }}">

@@ -9,5 +9,6 @@ urlpatterns = [
     path('get_melodies', views.get_melodies, name="get-melodies"),
     path('delete_melody', views.delete_melody, name="delete-melody"),
     path('add_vote', views.add_vote, name="add_vote"),
-    path('melodies', views.melodies, name="melodies")
+    path('melodies', views.melodies, name="melodies"),
+    path('melodies/<int:melody_id>', views.melody, name="melody")
 ]
