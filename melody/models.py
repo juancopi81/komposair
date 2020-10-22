@@ -23,3 +23,10 @@ class Vote(models.Model):
 
 	def __str__(self):
 		return f"{self.person} - {self.melody} - {self.user_score}"
+
+class Comment(models.Model):
+
+	posted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="reviews")
+	melody = models.ForeignKey(Melody, on_delete=models.CASCADE, related_name="comments")
+	date_posted = models.DateTimeField(default=timezone.now)
+	comment = models.TextField()

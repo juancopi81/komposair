@@ -7,7 +7,7 @@ from django.contrib import messages
 from .utils import parse_motif, MelodyGenerator, SEQUENCE_LENGTH
 import json
 from .models import Melody, Vote
-from .forms import FilterForm
+from .forms import FilterForm, CommentForm
 
 def home(request):
 	return render(request, "melody/home.html")
@@ -119,7 +119,7 @@ def get_melodies(request):
 
 	# Get start and end point
 	start = int(request.GET.get("start") or 0)
-	end = int(request.GET.get("end") or (start + 9))
+	end = int(request.GET.get("end") or (start + 4))
 	personal = json.loads(request.GET.get("personal") or False)
 	m_filter = str(request.GET.get("filter") or "score")
 	m_order = str(request.GET.get("order") or "-")
@@ -138,7 +138,10 @@ def get_melodies(request):
 
 	else:
 		# Get all melodies of komposair
-		melodies = Melody.objects.all().order_by(m_order_by)[start:end+1].values()
+		if (start != end):
+		    melodies = Melody.objects.all().order_by(m_order_by)[start:end+1].values()
+		else:
+			melodies = Melody.objects.filter(pk=start).values()
 
 	# Check if user is authenticated
 	if person.is_authenticated:
@@ -261,6 +264,8 @@ def melodies(request):
 
 	return render(request, "melody/melodies.html", context)
 
+# https://stackoverflow.com/questions/46870835/django-comment-form-in-an-existing-template-how-to-define-it-in-views-py
+# https://stackoverflow.com/questions/39560175/django-redirect-to-same-page-after-post-method-using-class-based-views
 def melody(request, melody_id):
 
 	melody = Melody.objects.filter(pk=melody_id)
@@ -270,10 +275,13 @@ def melody(request, melody_id):
 	else:
 		message = ""
 
+	form = CommentForm()
+
 	context = {
 		"title": "Details of Melody ",
 		"message": message,
-		"melody_id": melody_id
+		"melody_id": melody_id,
+		"form": form
 	}
 
 	return render(request, "melody/melody.html", context)

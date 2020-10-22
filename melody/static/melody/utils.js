@@ -95,6 +95,10 @@ class TonePlayer {
      }
 }
 
+// Colors
+let colorVote = '#ff0000';
+let colorNoVote = '#000000';
+
 async function saveMelody(melodyUrl, bpm, model, melodyId = -1) {
 	
 	// Get the notes out of the url
@@ -114,7 +118,7 @@ async function saveMelody(melodyUrl, bpm, model, melodyId = -1) {
 	const csrftoken = getCookie('csrftoken');
 
 	// Send request to save melody
-	fetch('save_melody', {
+	fetch('/save_melody', {
 		method: 'POST',
 		body: data,
 		headers: { "X-CSRFToken": csrftoken },

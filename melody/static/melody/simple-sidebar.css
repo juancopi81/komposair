@@ -470,3 +470,10 @@
 #filter-melodies {
   padding: 15px;
 }
+
+.comments {
+  height: 200px;
+  margin-left: 20px;
+  overflow-y: auto;
+  width: 100%;
+}

@@ -5,10 +5,6 @@ let quantity = 4;
 // Variable of the melody template 
 let melodyTemplate;
 
-// Colors
-let colorVote = '#ff0000';
-let colorNoVote = '#000000';
-
 let personalMelodies = true;
 
 // When DOM loads, render melodies

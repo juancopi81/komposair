@@ -1,5 +1,9 @@
 {% extends "melody/base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
+{% block javascript %}
+	<script src="{% static 'melody/single-melody.js' %}/"></script>
+{% endblock javascript %}
 
 {% block nav_item_dropdown %}active{% endblock nav_item_dropdown %}
 
@@ -8,8 +12,22 @@
 {% endblock h1_title %}
 	
 {% block content %}
-	<div id="melodies">
+	<div id="melodies" data-melody-id="{{ melody_id }}">
 		
+	</div>
+	<div class="comments"></div>
+	<div id="div-main">
+		<hr>
+	</div>
+	<div id="input-comment">
+		<h6>Your comment: (you need to be logged in)</h6>
+		<form method="POST">
+			{% csrf_token %}
+			{{ form|crispy }}
+			<div class="form-group">
+	      	  <button class="btn btn-primary" type="submit">Comment</button>
+	      </div>
+		</form>
 	</div>
 
 {% endblock content %}
