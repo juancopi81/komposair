@@ -1,0 +1,29 @@
+{% extends "melody/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block javascript %}
+	<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('contact').classList.add('side-menu');
+		});
+	</script>
+{% endblock javascript %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-10 col-md-8 col-lg-6 mx-auto">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            <h5 class="card-title text-center">Send us an email</h5>
+            <form class="form-signin" method="POST">
+              {% csrf_token %}
+              {{ form|crispy }}
+              <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Send</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+	  </div>
+{% endblock content %}

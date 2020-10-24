@@ -472,8 +472,21 @@
 }
 
 .comments {
-  height: 200px;
+  height: 350px;
   margin-left: 20px;
   overflow-y: auto;
   width: 100%;
+}
+
+.comment {
+  padding: 10px;
+}
+
+.comment-user {
+  padding-bottom: 5px;
+  padding-left: 5px;
+}
+
+.side-menu {
+  background-color:#dae0e5!important
 }

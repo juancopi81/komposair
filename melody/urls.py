@@ -10,5 +10,9 @@ urlpatterns = [
     path('delete_melody', views.delete_melody, name="delete-melody"),
     path('add_vote', views.add_vote, name="add_vote"),
     path('melodies', views.melodies, name="melodies"),
-    path('melodies/<int:melody_id>', views.melody, name="melody")
+    path('melodies/<int:melody_id>', views.melody, name="melody"),
+    path('random_melody', views.random_melody, name="random_melody"),
+    path('about', views.about, name="about"),
+    path('contact', views.contact, name="contact"),
+    path('acknowledgements', views.acknowledgements, name="acknowledgements")
 ]

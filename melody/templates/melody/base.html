@@ -6,8 +6,14 @@
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  {% if description %}
+    <meta name="description" content="{{ description }}">
+  {% else %}
+    <meta name="description" content="Create melodies using AI. Download your melody as a midi file or save it in your profile">
+  {% endif %}
+  {% if author %}
+    <meta name="author" content="">
+  {% endif %}
 
   
   {% if title %}
@@ -104,9 +110,9 @@
       <div class="sidebar-heading">Komposair </div>
       <div class="list-group list-group-flush">
         <a href="{% url 'melodies' %}" class="list-group-item list-group-item-action bg-light" id="saved-melodies">Saved Melodies</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">About</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Contact</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Acknowledgements</a>
+        <a href="{% url 'about' %}" class="list-group-item list-group-item-action bg-light" id="about">About</a>
+        <a href="{% url 'contact' %}" class="list-group-item list-group-item-action bg-light" id="contact">Contact</a>
+        <a href="{% url 'acknowledgements' %}" class="list-group-item list-group-item-action bg-light" id="acknowledgements">Acknowledgements</a>
       </div>
     </div>
     <!-- /#sidebar-wrapper -->
@@ -138,7 +144,7 @@
                   <a class="dropdown-item" href="{% url 'profile' %}">Profile{% block span_current_profile %}{% endblock span_current_profile %}</a>
                   <a class="dropdown-item" href="{% url 'my-melodies' %}">My melodies{% block span_current_my_melodies %}{% endblock span_current_my_melodies %}</a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">I feel lucky</a>
+                  <a class="dropdown-item" href="{% url 'random_melody' %}">I feel lucky</a>
                 </div>
               </li>
             {% else %}

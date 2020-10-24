@@ -1,6 +1,7 @@
 {% extends "melody/base.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% load markdownify %}
 {% block javascript %}
 	<script src="{% static 'melody/single-melody.js' %}/"></script>
 {% endblock javascript %}
@@ -12,22 +13,48 @@
 {% endblock h1_title %}
 	
 {% block content %}
-	<div id="melodies" data-melody-id="{{ melody_id }}">
-		
+	<div class="comments">
+		<div id="melodies" data-melody-id="{{ melody_id }}">
+			
+		</div>
+	
+		{% if valid_melody %}
+			<div class="comments-title">
+				<h4>Comments</h4>
+			</div>
+			{% for comment in comments %}
+				<div class="comment">
+					<div class="comment-user">
+						<small class="text-muted">{{ comment.posted_by }} wrote on {{ comment.date_posted|date:"F d, Y" }}:</small>
+					</div>
+					<div class="comment-text">{{ comment.comment|markdownify }}</div>
+				</div>
+			{% empty %}
+				<p>Be the first to comment</p>
+			{% endfor %}
+		{% endif %}
 	</div>
-	<div class="comments"></div>
-	<div id="div-main">
-		<hr>
-	</div>
-	<div id="input-comment">
-		<h6>Your comment: (you need to be logged in)</h6>
-		<form method="POST">
-			{% csrf_token %}
-			{{ form|crispy }}
-			<div class="form-group">
-	      	  <button class="btn btn-primary" type="submit">Comment</button>
-	      </div>
-		</form>
-	</div>
+	{% if valid_melody %}
+		<div id="div-main">
+			<hr>
+		</div>
+	
+		<div id="input-comment">
+			<h6>Your comment: (you need to be logged in)</h6>
+			<form method="POST">
+				{% csrf_token %}
+				{{ form|crispy }}
+				{% if user.is_authenticated %}
+					<div class="form-group">
+						<button class="btn btn-primary" type="submit">Comment</button>
+					</div>
+				{% else %}
+					<div class="form-group">
+						<button class="btn btn-primary" type="submit" disabled="">Comment - Please logged in</button>
+					</div>
+				{% endif %}
+			</form>	
+		</div>
+	{% endif %}
 
 {% endblock content %}

@@ -1,16 +1,20 @@
-from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
+from django.urls import reverse
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.mail import send_mail, BadHeaderError
 from .utils import parse_motif, MelodyGenerator, SEQUENCE_LENGTH
 import json
+import random
 from .models import Melody, Vote
-from .forms import FilterForm, CommentForm
+from .forms import FilterForm, CommentForm, ContactForm
 
 def home(request):
-	return render(request, "melody/home.html")
+	return render(request, "melody/home.html", 
+		{"description": "Enter your motif and generate beautiful melodies using AI. Download the melodies as a midi files or save them to your profile. Try Komposair now"})
 
 # Generate the melody based on the seed
 @require_http_methods(["POST"])
@@ -106,10 +110,12 @@ def my_melodies(request):
 		form = FilterForm()
 
 	title = "My Saved Melodies"
+	description = "Check the melodies in your profile. You can download, filter, vote and erase them"
 
 	context = {
 		"title": title,
-		"form": form
+		"form": form,
+		"description": description
 	}
 
 	# Render template 
@@ -256,32 +262,109 @@ def melodies(request):
 		form = FilterForm()
 
 	title = "Generated Melodies by AI"
+	description = "Find beautiful melodies generated with AI. You can download them as midi files or save them in your profile. Vote for your favorite’s ones"
 
 	context = {
 		"title": title,
-		"form": form
+		"form": form,
+		"description": description
 	}
 
 	return render(request, "melody/melodies.html", context)
 
-# https://stackoverflow.com/questions/46870835/django-comment-form-in-an-existing-template-how-to-define-it-in-views-py
-# https://stackoverflow.com/questions/39560175/django-redirect-to-same-page-after-post-method-using-class-based-views
-def melody(request, melody_id):
+# Render one melody with its comments if any
+def melody(request, melody_id):	
 
+	if request.method == "POST":
+		# Check the form and save it
+		form = CommentForm(request.POST or None)
+		if form.is_valid():
+			new_comment = form.save(commit=False)
+			new_comment.posted_by = request.user
+			m_melody = Melody.objects.get(pk=melody_id)
+			new_comment.melody = m_melody
+			new_comment.save()
+			messages.success(request, f"Your comment was successfully added")
+			return HttpResponseRedirect(request.path_info)
+	
+	valid_melody = True
 	melody = Melody.objects.filter(pk=melody_id)
 
 	if not melody:
 		message = "There is no such melody"
+		form = ""
+		valid_melody = False
+		comments = ""
 	else:
 		message = ""
-
-	form = CommentForm()
+		form = CommentForm()
+		m_melody = Melody.objects.get(pk=melody_id)
+		comments = m_melody.comments.all()
 
 	context = {
 		"title": "Details of Melody ",
 		"message": message,
 		"melody_id": melody_id,
-		"form": form
+		"form": form,
+		"valid_melody": valid_melody,
+		"comments": comments,
+		"description": "Check the details of the melody " + str(melody_id) + ": AI model used, date, bpm. You can also view the comments on the melody or add your own comment"
 	}
 
 	return render(request, "melody/melody.html", context)
+
+def random_melody(request):
+
+	melodies = Melody.objects.all()
+
+	melody = random.choice(melodies)
+
+	return HttpResponseRedirect(reverse("melody", args=(melody.id, )))
+
+def about(request): 
+
+	context = {
+		"description": "Information about how Komposair was created",
+		"title": "About Komposar"
+	}
+
+	return render(request, "melody/about.html", context)
+
+def contact(request):
+
+	description = "Get in contact with the team of Komposair"
+	title = "Get in touch"
+
+	if request.method == 'GET':
+		form = ContactForm()
+
+	else:
+		form = ContactForm(request.POST or None)
+		if form.is_valid():
+			subject = form.cleaned_data["subject"]
+			from_email = form.cleaned_data["from_email"]
+			message = form.cleaned_data["message"]
+
+			try:
+				send_mail(subject, message, from_email, ["juancopi_81@hotmail.com"])
+				messages.success(request, f"Your message was sent.")
+			except BadHeaderError:
+				return HttpResponse('Invalid header found')
+			return redirect('contact')
+
+	context = {
+		"description": description,
+		"title": title,
+		"form": form
+	}
+
+	return render(request, "melody/contact.html", context)
+
+def acknowledgements(request):
+
+	context = {
+		"description": "These are the main resources that made Komposar possible",
+		"title": "Acknowledgements"
+	}
+
+	return render(request, "melody/acknowledgements.html", context)

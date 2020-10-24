@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		personalMelodies = true;
 	} else {
 		personalMelodies = false;
-		document.getElementById('saved-melodies').setAttribute('style', 'background-color:#dae0e5!important');
+		document.getElementById('saved-melodies').classList.add('side-menu');
 	}
 
 	// Template of melodies

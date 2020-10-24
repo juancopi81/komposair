@@ -1,0 +1,53 @@
+{% extends "melody/base.html" %}
+
+{% block javascript %}
+	<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('acknowledgements').classList.add('side-menu');
+		});
+	</script>
+{% endblock javascript %}
+
+{% block content %}
+	<h1>Acknowledgements</h1>
+	<p>Here are the main resources I used to create Komposair</p>
+	<h4 id="code-libraries">Code/libraries</h4>
+	<ul>
+		<li>Bootstrap template: <a href="https://github.com/StartBootstrap/startbootstrap-simple-sidebar/">Simple-Sidebar</a></li>
+		<li>JS Library to render Music: <a href="https://www.vexflow.com/">Vexflow</a></li>
+		<li><a href="https://magenta.tensorflow.org/js-announce">Magenta JS</a> to render music, generate melodies, convert to midi and more</li>
+		<li><a href="http://web.mit.edu/music21/">Music21</a> toolkit for computer-aided musicology</li>
+		<li><a href="https://tonejs.github.io/">Tone.js</a> </li>
+		<li><a href="https://pypi.org/project/django-markdownify/">Django Markdownify</a></li>
+		<li><a href="http://tensorflow.org/">Tensorflow</a></li>
+		<li><a href="https://www.djangoproject.com/">Django</a></li>
+		<li><a href="https://www.python.org/">Python</a></li>
+		<li><a href="https://handlebarsjs.com/">Handlebars.js</a> </li>
+		<li><a href="https://stackoverflow.com/">Stackoverflow</a></li>
+		<li>CSS, HTML, Javascript, Bootstrap</li>
+	</ul>
+	<h4 id="courses-tutorials">Courses/tutorials</h4>
+	<ul>
+		<li>CS50: <ul>
+		<li><a href="https://courses.edx.org/courses/course-v1:HarvardX+CS50+X/course/">CS50&#39;s Introduction to Computer Science</a></li>
+		<li><a href="https://courses.edx.org/courses/course-v1:HarvardX+CS50W+Web/course/">CS50&#39;s Web Programming with Python and JavaScript</a></li>
+		</ul>
+		</li>
+		<li><a href="https://www.coursera.org/learn/machine-learning/home/welcome">Machine Learning by Stanford University</a></li>
+		<li>Deeplearning.ai:<ul>
+		<li><a href="https://www.deeplearning.ai/deep-learning-specialization/">Deep Learning Specialization</a></li>
+		<li><a href="https://www.deeplearning.ai/tensorflow-in-practice/">Tensorflow in Practice</a></li>
+		<li><a href="https://www.deeplearning.ai/tensorflow-data-and-deployment/">Tensorflow Data and Deployment</a></li>
+		</ul>
+		</li>
+		<li>Valerio Velardo - The Sound of AI:<ul>
+		<li><a href="https://www.youtube.com/watch?v=FLr0r-QhqH0&amp;list=PL-wATfeyAMNr0KMutwtbeDCmpwvtul-Xz">Melody generation with RNN-LSTM</a></li>
+		<li><a href="https://www.youtube.com/watch?v=CA0PQS1Rj_4&amp;list=PL-wATfeyAMNpCRQkKgtOZU_ykXc63oyzp">Deep Learning (Audio) Application: From Design to Deployment</a></li>
+		</ul>
+		</li>
+		<li>Nicolò Andronio <a href="https://www.andronio.me/2019/04/24/easily-play-a-song-track-in-javascript-using-tone-js-transport/">Easily play a song track in JavaScript using Tone.js Transport</a></li>
+		<li>Corey Schafer <a href="https://www.youtube.com/watch?v=UmljXZIypDc&amp;list=PL-osiE80TeTtoQCKZ03TU5fNfx2UY6U4p">Django Tutorial</a></li>
+	</ul>
+
+
+{% endblock content %}
