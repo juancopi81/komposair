@@ -343,7 +343,8 @@ def contact(request):
 		if form.is_valid():
 			subject = form.cleaned_data["subject"]
 			from_email = form.cleaned_data["from_email"]
-			message = form.cleaned_data["message"]
+			msg = form.cleaned_data["message"]
+			message = msg + " " + str(from_email)
 
 			try:
 				send_mail(subject, message, from_email, ["juancopi_81@hotmail.com"])
