@@ -44,7 +44,13 @@ And of course Komposair itself is open source with a [public repository](https:/
 
 ### CS50's Web Programming with Python and JavaScript
 
-Komposair is my final project for the course [CS50's Web Programming with Python and Javascript](https://www.edx.org/es/course/cs50s-web-programming-with-python-and-javascript). I tried to use many of the concepts taught by Prof. Bryan Yu.
+Komposair is my final project for the course [CS50's Web Programming with Python and Javascript](https://www.edx.org/es/course/cs50s-web-programming-with-python-and-javascript). I tried to use many of the concepts taught by Prof. Bryan Yu. These are the files insides Komposair:
+  * Komposair: Root project: settings, urls, init...
+  * Media: Media files of the project
+  * Melody: This is the main app of Komposair, with the static files, templates views
+  * Users: This is the app that handles user registration, login, logout
+
+ The project is mobile responsive and uses Javascript and Django with more than one model. I think that it satisfies the requirements of the course.
 
 ### Support
 
