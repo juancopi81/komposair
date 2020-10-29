@@ -4,6 +4,16 @@
 
 <head>
 
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FGJEM621H6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-FGJEM621H6');
+  </script>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   {% if description %}
@@ -45,8 +55,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@magenta/music@^1.20.0/es6/music_rnn.js"></script>
 
   <!-- Custom styles and js for this template -->
-  <link href="{% static 'melody/simple-sidebar.css' %}/" rel="stylesheet">
-  <script src="{% static 'melody/utils.js' %}/"></script>
+  <link href="{% static 'melody/simple-sidebar.css' %}" rel="stylesheet">
+  <script src="{% static 'melody/utils.js' %}"></script>
   {% block javascript %}{% endblock javascript %}
 
   <!-- Add fonts -->
