@@ -13,3 +13,4 @@ ENV/
 env.bak/
 venv.bak/
 /static
+.local_settings 
