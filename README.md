@@ -8,8 +8,8 @@ Komposair is a web app that lets musician create melodies using A
 
 # In the browser
 
-  - Komposar needs no installation you can use right in your browser
-  - We use Tone.js and Magente so you can hear the melodies in the browser or exporte them as a midi file if you prefer
+  - Komposar needs no installation you can use it right in your browser
+  - We use Tone.js and Magenta so you can hear the melodies in the browser or export them as a midi file if you prefer
 
 
 You can also:
