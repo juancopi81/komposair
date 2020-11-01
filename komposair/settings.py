@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import json
 
-if os.path.exits('/etc/config.json'):
+if os.path.exists('/etc/config.json'):
     with open('/etc/config.json') as config_file:
         config = json.load(config_file)
 else:
