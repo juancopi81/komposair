@@ -13,8 +13,15 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import json
 
-with open('/etc/config.json') as config_file:
-    config = json.load(config_file)
+if os.path.exits('/etc/config.json'):
+    with open('/etc/config.json') as config_file:
+        config = json.load(config_file)
+else:
+    config = {
+        'SECRET_KEY': 'somesecretkkeyasdf',
+        'EMAIL_PASS': 'somapass',
+        'EMAIL_USER': 'test@example.com'
+    }
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
