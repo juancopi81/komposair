@@ -1,3 +1,5 @@
+https://github.com/juancopi81/komposair/workflows/testing/badge.svg
+
 # Komposair
 
 Komposair is a web app that lets musician create melodies using A
