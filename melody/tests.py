@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.contrib.auth import get_user_model, authenticate
 from django.db.models import Sum
 from .models import Melody, Vote, Comment
@@ -57,3 +57,37 @@ class MelodyTestCase(TestCase):
 	def test_melody_comments_count(self):
 		melody = Melody.objects.get(notes=notes["m1"])
 		self.assertEqual(melody.comments.count(), 1)
+
+	def test_index(self):
+		c = Client()
+		response = c.get("/")
+		self.assertEqual(response.status_code, 200)
+
+	def test_melodies(self):
+		c = Client()
+		response = c.get("/melodies")
+		self.assertEqual(response.status_code, 200)
+
+	def test_about(self):
+		c = Client()
+		response = c.get("/about")
+		self.assertEqual(response.status_code, 200)
+
+	def test_contact(self):
+		c = Client()
+		response = c.get("/contact")
+		self.assertEqual(response.status_code, 200)
+
+	def test_acknowledgements(self):
+		c = Client()
+		response = c.get("/acknowledgements")
+		self.assertEqual(response.status_code, 200)
+
+	def test_melodies_melody(self):
+
+		melody = Melody.objects.get(notes=notes["m1"])
+
+		c = Client()
+		response = c.get(f"/melodies/{melody.id}")
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.context["comments"].count(), 1)
