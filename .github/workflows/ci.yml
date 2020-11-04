@@ -1,4 +1,4 @@
-name: Komposair CI/CD
+name: Komposair CI-CD
 on: push
 
 jobs:

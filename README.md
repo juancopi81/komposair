@@ -1,4 +1,4 @@
-[![Actions Status](https://github.com/juancopi81/komposair/workflows/Testing/badge.svg)](https://github.com/juancopi81/komposair/actions)
+[![Actions Status](https://github.com/juancopi81/komposair/workflows/Komposair%20CI-CD/badge.svg)](https://github.com/juancopi81/komposair/actions)
 
 # Komposair
 
