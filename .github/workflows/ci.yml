@@ -1,4 +1,4 @@
-name: Testing
+name: Komposair CI/CD
 on: push
 
 jobs:
@@ -23,9 +23,14 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py test
-    - uses: actions/checkout@master
-    - name: Setup Linode cli
-      uses: brendon1555/setup-linode-cli@master
+    - name: Deploy
+      uses: appleboy/ssh-action@master
       with:
-        LINODE_CLI_TOKEN: ${{ secrets.LINODE_CLI_TOKEN }}
-    - run: linode-cli --help
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        passphrase: ${{ secrets.PASSPHRASE }}
+        script: |
+          whoami
+          ls
