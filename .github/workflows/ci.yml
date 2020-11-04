@@ -33,5 +33,4 @@ jobs:
         port: ${{ secrets.PORT }}
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
-          whoami
-          ls
+          cd ${{ secrets.PROJECT_PATH }} && git pull
