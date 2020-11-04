@@ -23,7 +23,8 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py test
-    - name: Deploy
+    - name: Deploy to Linode
+      if: github.ref == 'refs/heads/master' && job.status == 'success'
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
