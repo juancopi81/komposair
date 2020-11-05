@@ -7,7 +7,7 @@ class SigninTest(TestCase):
 		self.user = get_user_model().objects.create_user(username='test', password='12test12', email='test@example.com')
 		self.user.save()
 
-	def test_correct_user(self):
+	def test_correct_username(self):
 		user = authenticate(username='test', password='12test12')
 		self.assertTrue((user is not None) and user.is_authenticated)
 
@@ -15,7 +15,7 @@ class SigninTest(TestCase):
 		user = authenticate(username='wrong', password='12test12')
 		self.assertFalse(user is not None and user.is_authenticated)
 
-	def test_wrong_pssword(self):
+	def test_wrong_password(self):
 		user = authenticate(username='test', password='wrong')
 		self.assertFalse(user is not None and user.is_authenticated)
 

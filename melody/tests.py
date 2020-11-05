@@ -84,10 +84,29 @@ class MelodyTestCase(TestCase):
 		self.assertEqual(response.status_code, 200)
 
 	def test_melodies_melody(self):
-
 		melody = Melody.objects.get(notes=notes["m1"])
-
 		c = Client()
 		response = c.get(f"/melodies/{melody.id}")
 		self.assertEqual(response.status_code, 200)
 		self.assertEqual(response.context["comments"].count(), 1)
+
+	def test_personal_melodies(self):
+		self.client.login(username='test', password='12test12')
+		c = Client()
+		response = c.get("/my_melodies", follow=True)
+		self.assertEqual(response.status_code, 200)
+
+	def test_personal_profile(self):
+		user = authenticate(username="test", password="12test12")
+		c = Client()
+		response = c.get("/profile", follow=True)
+		self.assertEqual(response.status_code, 200)
+
+	def test_add_comment(self):
+		melody = Melody.objects.get(notes=notes["m1"])
+		user = authenticate(username="test", password="12test12")
+		comment = Comment.objects.create(posted_by=user, melody=melody, comment="This is a new comment")
+		c = Client()
+		response = c.get(f"/melodies/{melody.id}")
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.context["comments"].count(), 2)
