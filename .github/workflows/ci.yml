@@ -40,4 +40,4 @@ jobs:
         port: ${{ secrets.PORT }}
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
-          cd ${{ secrets.PROJECT_PATH }} && git config pull.rebase false
+          cd ${{ secrets.PROJECT_PATH }} && git pull
