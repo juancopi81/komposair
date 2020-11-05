@@ -27,7 +27,7 @@ def home(request):
 # Generate the melody based on the seed
 @require_http_methods(["POST"])
 def generate(request):
-    
+
     # See if method was post
     if request.method == "POST":
 
@@ -72,7 +72,9 @@ def save_melody(request):
 
         # Check if user is authenticated
         if not request.user.is_authenticated:
-            response = JsonResponse({"success": False, "message": "You need to be logged in order to save melodies"}, status=200)
+            response = JsonResponse({"success": False, 
+                                     "message": "You need to be logged in order to save melodies"}, 
+                                     status=200)
 
         else:
             # Retrive values
@@ -211,14 +213,16 @@ def add_vote(request):
 
         # If not, insert the vote and update the score
         if not query_vote:
-            
+
             # Add new vote
             new_vote = Vote(user_score=vote, melody=melody, person=user)
             try:
                 new_vote.save()
             except Exception as e:
                 raise e
-                response = JsonResponse({"success": False, "message": "Something went wrong and your vote was not registered"}, status=200)
+                response = JsonResponse({"success": False, 
+                                         "message": "Something went wrong and your vote was not registered"}, 
+                                         status=200)
 
             # Update score
             melody.score += vote
@@ -226,11 +230,13 @@ def add_vote(request):
                 melody.save()
             except Exception as e:
                 raise e
-                response = JsonResponse({"success": False, "message": "Something went wrong and your vote was not registered"}, status=200)
+                response = JsonResponse({"success": False, 
+                                         "message": "Something went wrong and your vote was not registered"}, 
+                                         status=200)
 
             score = melody.score
             user_score = vote
-            response = JsonResponse({"success": True, "message": "Your vote was registered", 
+            response = JsonResponse({"success": True, "message": "Your vote was registered",
                                      "score": score, "user_score": user_score}, status=200)
 
         else:
@@ -248,7 +254,7 @@ def add_vote(request):
                 score = melody.score
                 user_score = query_vote.user_score
 
-                response = JsonResponse({"success": True, "message": "Your vote was registered", 
+                response = JsonResponse({"success": True, "message": "Your vote was registered",
                                          "score": score, "user_score": user_score}, status=200)
 
     else:
@@ -268,7 +274,8 @@ def melodies(request):
         form = FilterForm()
 
     title = "Generated Melodies by AI"
-    description = ("Find beautiful melodies generated with AI. You can download them as midi files or save them in your profile. "
+    description = ("Find beautiful melodies generated with AI. You can download them as midi "
+                   "files or save them in your profile. "
                    "Vote for your favorite’s ones")
 
     context = {
@@ -316,8 +323,8 @@ def melody(request, melody_id):
         "form": form,
         "valid_melody": valid_melody,
         "comments": comments,
-        "description": ("Check the details of the melody " 
-                        + str(melody_id) 
+        "description": ("Check the details of the melody "
+                        + str(melody_id)
                         + ": AI model used, date, bpm. You can also view the comments on the melody or add your own comment")
     }
 
@@ -333,7 +340,7 @@ def random_melody(request):
     return HttpResponseRedirect(reverse("melody", args=(melody.id, )))
 
 
-def about(request): 
+def about(request):
 
     context = {
         "description": "Information about how Komposair was created",
