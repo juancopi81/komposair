@@ -3,13 +3,13 @@ from django.contrib import messages
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpadteForm
 from django.contrib.auth.decorators import login_required
 
+
 def register(request):
 	if request.method == "POST":
 		form = UserRegisterForm(request.POST)
 		if form.is_valid():
 			form.save()
-			username = form.cleaned_data.get("username")
-			messages.success(request, f"Your account has been created! You are now able to log in.")
+			messages.success(request, "Your account has been created! You are now able to log in.")
 			return redirect("login")
 	else:
 		form = UserRegisterForm()
@@ -17,18 +17,19 @@ def register(request):
 	description = "Register in Komposair and start creating melodies our of your motifs using AI"
 	return render(request, "users/register.html", {"form": form, "title": "Register", "description": description})
 
+
 @login_required
 def profile(request):
 
 	if request.method == "POST":
 		u_form = UserUpdateForm(request.POST, instance=request.user)
-		p_form = ProfileUpadteForm(request.POST, 
+		p_form = ProfileUpadteForm(request.POST,
 								   request.FILES,
 								   instance=request.user.profile)
 		if u_form.is_valid() and p_form.is_valid():
 			u_form.save()
 			p_form.save()
-			messages.success(request, f"Your account has been updated")
+			messages.success(request, "Your account has been updated")
 			return redirect("profile")
 
 	else:
