@@ -41,4 +41,3 @@ def profile(request):
         "description": "Update your profile in Komposair"
     }
     return render(request, "users/profile.html", context)
-    

@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model, authenticate
 
+
 class SigninTest(TestCase):
 
 	def setUp(self):
