@@ -72,9 +72,9 @@ def save_melody(request):
 
         # Check if user is authenticated
         if not request.user.is_authenticated:
-            response = JsonResponse({"success": False, 
-                                     "message": "You need to be logged in order to save melodies"}, 
-                                     status=200)
+            response = JsonResponse({"success": False,
+                                     "message": "You need to be logged in order to save melodies"},
+                                    status=200)
 
         else:
             # Retrive values
@@ -220,9 +220,9 @@ def add_vote(request):
                 new_vote.save()
             except Exception as e:
                 raise e
-                response = JsonResponse({"success": False, 
-                                         "message": "Something went wrong and your vote was not registered"}, 
-                                         status=200)
+                response = JsonResponse({"success": False,
+                                         "message": "Something went wrong and your vote was not registered"},
+                                        status=200)
 
             # Update score
             melody.score += vote
@@ -230,9 +230,9 @@ def add_vote(request):
                 melody.save()
             except Exception as e:
                 raise e
-                response = JsonResponse({"success": False, 
-                                         "message": "Something went wrong and your vote was not registered"}, 
-                                         status=200)
+                response = JsonResponse({"success": False,
+                                         "message": "Something went wrong and your vote was not registered"},
+                                        status=200)
 
             score = melody.score
             user_score = vote
