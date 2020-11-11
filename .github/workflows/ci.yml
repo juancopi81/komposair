@@ -38,3 +38,5 @@ jobs:
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
           cd ${{ secrets.PROJECT_PATH }} && git pull
+          python manage.py collectstatic
+          sudo service apache2 restart

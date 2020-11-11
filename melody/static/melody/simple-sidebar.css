@@ -388,6 +388,10 @@
   .utils-render midi-player {
     margin-right: 25px;
   }
+  #staff-input {
+    overflow-x: scroll;
+  }
+
 }
 
 .melody-render {
