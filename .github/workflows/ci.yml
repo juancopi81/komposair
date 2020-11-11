@@ -40,5 +40,5 @@ jobs:
           cd ${{ secrets.PROJECT_PATH }}
           git pull
           source venv/bin/activate
-          python manage.py collectstatic
+          python manage.py collectstatic --no-input
           sudo service apache2 restart
