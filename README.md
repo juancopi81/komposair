@@ -2,7 +2,7 @@
 
 # Komposair
 
-Komposair is a web app that lets musician create melodies using A
+Komposair is a web app that lets musician create melodies using AI. Visit Komposar at https://www.komposair.com/
 
   - Create melodies based on your motif
   - Explore other melodies created by the community
