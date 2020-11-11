@@ -169,8 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		document.getElementById('input-generate').disabled = true;
 
 		// Go to top of the page
-		document.body.scrollTop = 0; // For Safari
-		document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+		window.scrollTo(0, 0);
 
 		// Get bpm
 		let bpm = parseInt(document.getElementById('bpm').value);

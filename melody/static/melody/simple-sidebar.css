@@ -389,6 +389,8 @@
     margin-right: 25px;
   }
   #staff-input {
+    width: 430px;
+    height: 140px;
     overflow-x: scroll;
   }
 
