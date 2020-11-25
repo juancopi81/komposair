@@ -1,0 +1,42 @@
+{% extends "melody/base.html" %}
+
+{% block javascript %}
+	<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('models').classList.add('side-menu');
+		});
+	</script>
+{% endblock javascript %}
+
+{% block content %}
+	<h1>Custom models used to generate the melodies</h1>
+	<p>Here you can find a brief explanation of the models that you can used in Komposair to generate your melodies</p>
+	<ul>
+		<li><strong>lstm-folk-1:</strong></li> 
+		<p>This was the first model I uploaded to Komposair. I did not document this model very well but this is some information that I remember:</p>
+		<ul>
+			<li>Keras Model</li>
+			<li>Layers: <code>keras.layers.LSTM(num_units[0])(input_layer)</code> and <code>keras.layers.Dropout(0.2)(x)</code></li>
+			<li>Learning rate: 0.001</li>
+			<li>Loss: "sparse_categorical_crossentropy"</li>
+			<li>Dataset: <i>Deutscher Liederhort. Auswahl der vorzüglicheren Deutschen Volkslieder, originally collected by Ludwig Erk; revised and edited by Franz Magnus Böhme in 3 vols., Leipzig, 1893-94</i>. Taken from <a href="https://kern.humdrum.org/cgi-bin/browse?l=essen/europa/deutschl/erk">KernScores website</a></li>
+		</ul>
+		<br>
+		<li><strong>lstm-folk-2:</strong></li>
+		<p>After training the first model, I decided to use the same structure but in the whole dataset of Europe folk songs in the KernWebsite</p>
+		<ul>
+			<li>Keras Model</li>
+			<li>Layers: <code>keras.layers.LSTM(num_units[0])(input_layer)</code> and <code>keras.layers.Dropout(0.2)(x)</code></li>
+			<li>Learning rate: 0.001</li>
+			<li>Loss: "sparse_categorical_crossentropy"</li>
+			<li>Epochs: 50</li>
+			<li>Final loss: 0.33</li>
+			<li>Final accuracy: 0.8917</li>
+			<li>Trained in Colab it took about two hours</li>
+			<li>Dataset: <i>Folksongs from the continent of Europe</i>. Taken from <a href="https://kern.humdrum.org/cgi-bin/browse?l=/essen/europa">KernScores website</a></li>
+			<img src="https://drive.google.com/thumbnail?id=1LilSHsUneBaE7Q5h3KaiWQaPkSmoX7bS" alt="Model LSTM folk 2">
+			<img src="https://drive.google.com/thumbnail?id=1M9zzkvhZGNkTGUanErZE0bPzpEWGjXwI" alt="Loss function of LSTM folk 2">
+		</ul>
+	</ul>
+
+{% endblock content %}

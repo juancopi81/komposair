@@ -14,5 +14,6 @@ urlpatterns = [
     path('random_melody', views.random_melody, name="random_melody"),
     path('about', views.about, name="about"),
     path('contact', views.contact, name="contact"),
-    path('acknowledgements', views.acknowledgements, name="acknowledgements")
+    path('acknowledgements', views.acknowledgements, name="acknowledgements"),
+    path('models', views.models, name="models")
 ]

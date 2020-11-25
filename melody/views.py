@@ -340,12 +340,21 @@ def random_melody(request):
 
     return HttpResponseRedirect(reverse("melody", args=(melody.id, )))
 
+def models(request):
+
+    context = {
+        "description": "Information about the models used to generate the melodies",
+        "title": "Models"
+    }
+
+    return render(request, "melody/models.html", context)
+
 
 def about(request):
 
     context = {
         "description": "Information about how Komposair was created",
-        "title": "About Komposar"
+        "title": "About Komposair"
     }
 
     return render(request, "melody/about.html", context)
