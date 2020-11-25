@@ -171,8 +171,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		// Go to top of the page
 		window.scrollTo(0, 0);
 
-		// Get bpm
+		// Get bpm and model
 		let bpm = parseInt(document.getElementById('bpm').value);
+		var sel = document.getElementById('custom-model');
+		let nmodel = sel.options[sel.selectedIndex].value;
+		let gmodel = sel.options[sel.selectedIndex].text;
 
 		// Create array of urls and models
 		let urls = [];
@@ -219,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 				// Add url and model to arrays
 				urls.push(objectURL);
-				models.push('lstm_folk_1');
+				models.push(gmodel);
 
 				// If 2 request, add magenta generated melody, hide loader and enable generator button
 				if (urls.length === 2) {
@@ -273,8 +276,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			// Add the data to send with the request
 			const data = new FormData();
 
-			// Add bpm and temperature
+			// Add bpm, model and temperature
 			data.append('bpm', document.getElementById('bpm').value);
+			data.append('model', nmodel);
 			data.append('temperature', temperatures[i]);
 			
 			// Add notes to motif if not empty, else, add default C4 quarter length

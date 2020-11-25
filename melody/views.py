@@ -35,6 +35,7 @@ def generate(request):
         seed = json.loads(request.POST.get("motif"))
         bpm = int(request.POST.get("bpm"))
         temperature = float(request.POST.get("temperature"))
+        model = int(request.POST.get('model'))
 
         # Sanity check
         if not seed:
@@ -45,7 +46,7 @@ def generate(request):
         sixteenth_duration = duration / 0.25
 
         # Create a melody generator
-        mg = MelodyGenerator()
+        mg = MelodyGenerator(model)
 
         melody = mg.generate_melody(encoded_seed, 64 - int(sixteenth_duration), SEQUENCE_LENGTH, temperature)
 

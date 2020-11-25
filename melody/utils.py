@@ -6,7 +6,8 @@ from tensorflow.keras.utils import to_categorical
 import music21 as m21
 
 SEQUENCE_LENGTH = 64
-MAPPING_PATH = "mapping.json"
+MAPPING_PATHS = ["mapping.json", "mapping_europa.json"]
+MODELS = ["lstm-folk-1.h5", "lstm-folk-2.h5"]
 
 
 class MelodyGenerator:
@@ -17,8 +18,8 @@ class MelodyGenerator:
 
     Attributes:
     ----------
-    model_path : str
-        string where the model is stored
+    model_name : str
+        string - name of the model
     model : h5 model
         h5 model to generate a melody
 
@@ -28,15 +29,15 @@ class MelodyGenerator:
     generates melody based on the seed usind the given model
     """
 
-    def __init__(self, model_path="model.h5"):
+    def __init__(self, model_number):
 
         DIRNAME = os.path.dirname(__file__)
 
-        self.model_path = os.path.join(DIRNAME, model_path)
+        self.model_path = os.path.join(DIRNAME, MODELS[model_number])
 
         self.model = load_model(self.model_path)
 
-        mapping_path = os.path.join(DIRNAME, MAPPING_PATH)
+        mapping_path = os.path.join(DIRNAME, MAPPING_PATHS[model_number])
 
         with open(mapping_path, "r") as fp:
             self._mappings = json.load(fp)
