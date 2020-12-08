@@ -12,34 +12,56 @@
 	<h1>Custom models used to generate the melodies</h1>
 	<p>Here you can find a brief explanation of the models that you can used in Komposair to generate your melodies</p>
 	<ul>
-		<li><strong>lstm-folk-1:</strong></li> 
-		<p>This was the first model I uploaded to Komposair. I did not document this model very well but this is some information that I remember:</p>
-		<ul>
-			<li>Keras Model</li>
-			<li>Layers: <code>keras.layers.LSTM(num_units[0])(input_layer)</code> and <code>keras.layers.Dropout(0.2)(x)</code></li>
-			<li>Learning rate: 0.001</li>
-			<li>Loss: "sparse_categorical_crossentropy"</li>
-			<li>Dataset: <i>Deutscher Liederhort. Auswahl der vorzüglicheren Deutschen Volkslieder, originally collected by Ludwig Erk; revised and edited by Franz Magnus Böhme in 3 vols., Leipzig, 1893-94</i>. Taken from <a href="https://kern.humdrum.org/cgi-bin/browse?l=essen/europa/deutschl/erk">KernScores website</a></li>
-		</ul>
+		<li>
+			<strong>lstm-folk-1:</strong> 
+			<p>This was the first model I uploaded to Komposair. I did not document this model very well but this is some information that I remember:</p>
+			<ul>
+				<li>Keras Model</li>
+				<li>Layers: <code>keras.layers.LSTM(num_units[0])(input_layer)</code> and <code>keras.layers.Dropout(0.2)(x)</code></li>
+				<li>Learning rate: 0.001</li>
+				<li>Loss: "sparse_categorical_crossentropy"</li>
+				<li>Dataset: <i>Deutscher Liederhort. Auswahl der vorzüglicheren Deutschen Volkslieder, originally collected by Ludwig Erk; revised and edited by Franz Magnus Böhme in 3 vols., Leipzig, 1893-94</i>. Taken from <a href="https://kern.humdrum.org/cgi-bin/browse?l=essen/europa/deutschl/erk">KernScores website</a></li>
+			</ul>
+		</li>
 		<br>
-		<li><strong>lstm-folk-2:</strong></li>
-		<p>After training the first model, I decided to use the same structure but in the whole dataset of Europe folk songs in the KernWebsite</p>
-		<ul>
-			<li>Keras Model</li>
-			<li>Layers: <code>keras.layers.LSTM(num_units[0])(input_layer)</code> and <code>keras.layers.Dropout(0.2)(x)</code></li>
-			<li>Learning rate: 0.001</li>
-			<li>Loss: "sparse_categorical_crossentropy"</li>
-			<li>Epochs: 50</li>
-			<li>Final loss: 0.33</li>
-			<li>Final accuracy: 0.8917</li>
-			<li>Trained in Colab it took about two hours</li>
-			<li>Dataset: <i>Folksongs from the continent of Europe</i>. Taken from <a href="https://kern.humdrum.org/cgi-bin/browse?l=/essen/europa">KernScores website</a></li>
-			<img src="https://drive.google.com/thumbnail?id=1LilSHsUneBaE7Q5h3KaiWQaPkSmoX7bS" alt="Model LSTM folk 2">
-			<img src="https://drive.google.com/thumbnail?id=1M9zzkvhZGNkTGUanErZE0bPzpEWGjXwI" alt="Loss function of LSTM folk 2">
-		</ul>
-		<li><strong>lstm-folk-3:</strong></li>
-		<p>This is the same lstm-folk-2 model (please see above for details of this model). The only difference is that I kept on training for more EPOCHS until reaching an accuracy of 0.9305</p>
-		<p>Model 2 and 3 are not superior of model 1 in my opinion. I think that the advantage of model 1 is that I trained this model in a specific subset of the dataset, so it contains more uniform samples (samples of the same region in Europe)</p>
+		<li>
+			<strong>lstm-folk-2:</strong>
+			<p>After training the first model, I decided to use the same structure but in the whole dataset of Europe folk songs in the KernWebsite</p>
+			<ul>
+				<li>Keras Model</li>
+				<li>Layers: <code>keras.layers.LSTM(num_units[0])(input_layer)</code> and <code>keras.layers.Dropout(0.2)(x)</code></li>
+				<li>Learning rate: 0.001</li>
+				<li>Loss: "sparse_categorical_crossentropy"</li>
+				<li>Epochs: 50</li>
+				<li>Final loss: 0.33</li>
+				<li>Final accuracy: 0.8917</li>
+				<li>Trained in Colab it took about two hours</li>
+				<li>Dataset: <i>Folksongs from the continent of Europe</i>. Taken from <a href="https://kern.humdrum.org/cgi-bin/browse?l=/essen/europa">KernScores website</a></li>
+				<img src="https://drive.google.com/thumbnail?id=1LilSHsUneBaE7Q5h3KaiWQaPkSmoX7bS" alt="Model LSTM folk 2">
+				<img src="https://drive.google.com/thumbnail?id=1M9zzkvhZGNkTGUanErZE0bPzpEWGjXwI" alt="Loss function of LSTM folk 2">
+			</ul>
+		</li>
+		<li>
+			<strong>lstm-folk-3:</strong>
+			<p>This is the same lstm-folk-2 model (please see above for details of this model). The only difference is that I kept on training for more EPOCHS until reaching an accuracy of 0.9305</p>
+			<p>Model 2 and 3 are not superior of model 1 in my opinion. I think that the advantage of model 1 is that I trained this model in a specific subset of the dataset, so it contains more uniform samples (samples of the same region in Europe)</p>
+		</li>
+		<li>
+			<strong>lstm-china-1:</strong>
+			<p>After training in folk European songs, I used here the dataset of Chine (same kern dataset) that can be found <a href="http://kern.ccarh.org/cgi-bin/ksbrowse?l=/essen/asia/china">here</a></p>
+			<ul>
+				<li>Keras Model</li>
+				<li>Layers: <code>keras.layers.LSTM(num_units[0])(input_layer)</code> and <code>keras.layers.Dropout(0.2)(x)</code></li>
+				<li>Learning rate: 0.001 for the first 100 epochs then 0.0001 for the next 100 epochs</li>
+				<li>Loss: "sparse_categorical_crossentropy"</li>
+				<li>Epochs: 200</li>
+				<li>Final loss: 0.2254</li>
+				<li>Final accuracy: 0.9248</li>
+				<li>Trained in Colab it took about two hours</li>
+				<li>Dataset: <i>Folksongs from Chine</i>. Taken from <a href="http://kern.ccarh.org/cgi-bin/ksbrowse?l=/essen/asia/china">KernScores website</a></li>
+				<img src="https://drive.google.com/thumbnail?id=1XTWA25N3naP81zeYM2aZsZYhjf2nnrVf" alt="Loss function of LSTM China music 1">
+			</ul>
+		</li>
 	</ul>
 
 {% endblock content %}

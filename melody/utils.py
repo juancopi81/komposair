@@ -6,8 +6,8 @@ from tensorflow.keras.utils import to_categorical
 import music21 as m21
 
 SEQUENCE_LENGTH = 64
-MAPPING_PATHS = ["mapping.json", "mapping_europa.json", "mapping_europa.json"]
-MODELS = ["lstm-folk-1.h5", "lstm-folk-2.h5", "lstm-folk-3.h5"]
+MAPPING_PATHS = ["mapping.json", "mapping_europa.json", "mapping_europa.json", "mapping_china.json"]
+MODELS = ["lstm-folk-1.h5", "lstm-folk-2.h5", "lstm-folk-3.h5", "lstm-china-1.h5"]
 
 
 class MelodyGenerator:
