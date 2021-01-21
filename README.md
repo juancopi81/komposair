@@ -2,6 +2,8 @@
 
 # Komposair
 
+*Komposair was selected by TensorFlow for the [TensorFlow Community Spotlight program](https://blog.tensorflow.org/2020/11/tensorflow-community-spotlight-program-update.html) on December 2020*
+
 Komposair is a web app that lets musician create melodies using AI. Visit Komposar at https://www.komposair.com/
 
   - Create melodies based on your motif
